@@ -46,7 +46,21 @@ export class PollsController {
   }
 
   @Post(':pollId/likes')
-  async likePoll(@Param('pollId') pollId: string) {}
+  async likePoll(
+    @Param('pollId') pollId: string,
+    @Headers('Authorization') token?: string,
+    @Body('like') like?: boolean,
+    @Body('comment') comment?: string
+  ) {
+    const { _id, name } = this.pollsService.auth(token);
+
+    if (like === null || like === undefined) {
+      throw new BadRequestException();
+    }
+
+    await this.pollsService.likePoll(pollId, _id as string, name, like, comment);
+    return { status: 'success' };
+  }
 
   @Delete()
   async deletePollAll() {
