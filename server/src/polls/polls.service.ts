@@ -25,7 +25,7 @@ export class PollsService {
   }
 
   async getPoll(pollId: string) {
-    return await this.pollModel.findById(pollId);
+    return await this.pollModel.findById(pollId).lean();
   }
 
   async listPolls(userId: string) {
