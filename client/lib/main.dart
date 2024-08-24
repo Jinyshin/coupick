@@ -1,9 +1,7 @@
-import 'package:client/screens/voting_detail_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'providers/wishlist_product_provider.dart';
 import 'providers/shared_preference_service.dart'; // SharedPreferenceService 가져오기
-import 'screens/wishlist_screen.dart';
 import 'screens/listview_vote.dart';
 import 'screens/signup.dart';
 
@@ -37,7 +35,9 @@ class MyApp extends StatelessWidget {
               useMaterial3: true,
             ),
             debugShowCheckedModeBanner: false,
-            home: hasToken ? const ListViewVote() : const UsernameCreationScreen(),
+            home: hasToken
+                ? const ListViewVote()
+                : const UsernameCreationScreen(),
             routes: {
               '/vote': (context) => const ListViewVote(),
               '/create-username': (context) => const UsernameCreationScreen(),

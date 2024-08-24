@@ -1,8 +1,8 @@
 import 'package:client/common/const/app_colors.dart';
 import 'package:flutter/material.dart';
 
-class VotingDetailScreen extends StatelessWidget {
-  const VotingDetailScreen({super.key});
+class PollDetailScreen extends StatelessWidget {
+  const PollDetailScreen({super.key, required String pollId});
 
   @override
   Widget build(BuildContext context) {

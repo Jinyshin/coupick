@@ -1,3 +1,5 @@
+import 'package:client/common/const/app_colors.dart';
+import 'package:client/screens/poll_detail_screen.dart';
 import 'package:flutter/material.dart';
 import './widgets/pink_container.dart';
 import '../models/polls.dart';
@@ -6,7 +8,6 @@ import 'package:client/utilities/logout.dart';
 
 import './wishlist_screen.dart'; // Import the WishlistScreen
 import '../providers/listview_product_provider.dart'; // Import the product provider
-
 
 class ListViewVote extends StatelessWidget {
   const ListViewVote({super.key});
@@ -18,7 +19,7 @@ class ListViewVote extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Product List'),
+        title: const Text('coupicks'),
         actions: [
           IconButton(
             icon: const Icon(Icons.notifications),
@@ -40,13 +41,24 @@ class ListViewVote extends StatelessWidget {
           final poll = products[index];
           return Column(
             children: [
-              PinkContainer(poll: poll),
+              InkWell(
+                onTap: () {
+                  // 각 아이템의 id 값을 사용하여 VotingDetailScreen으로 네비게이션
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => PollDetailScreen(pollId: poll.id),
+                    ),
+                  );
+                },
+                child: PinkContainer(poll: poll),
+              ),
               const Padding(
-                padding: EdgeInsets.symmetric(horizontal: 16.0), // 왼쪽, 오른쪽에 16의 패딩 추가
+                padding: EdgeInsets.symmetric(horizontal: 16.0),
                 child: Divider(
-                  thickness: 1, // 두께를 1로 설정
+                  thickness: 1,
                 ),
-              ),  // Divider 추가
+              ),
             ],
           );
         },
@@ -60,9 +72,9 @@ class ListViewVote extends StatelessWidget {
               builder: (context) => const WishlistScreen(),
             ),
           );
-        },
-        child: const Icon(Icons.add), // Icon to display on the FAB
-        backgroundColor: Theme.of(context).colorScheme.primary, // Use colorScheme's primary color
+        }, // Icon to display on the FAB
+        backgroundColor: AppColors.primaryColor,
+        child: const Icon(Icons.add), // Use colorScheme's primary color
       ),
     );
   }
