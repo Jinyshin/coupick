@@ -49,6 +49,7 @@ class PollDetailScreen extends StatelessWidget {
                   flex: 4,
                   child: SingleChildScrollView(
                     child: ReactionSection(
+                      pollId: poll.id,
                       likes: poll.likes,
                       dislikes: poll.dislikes,
                       comments: poll.comments,

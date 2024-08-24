@@ -24,9 +24,11 @@ class _ListViewVoteState extends State<ListViewVote> {
     super.initState();
     _scrollController = ScrollController();
 
-    // Fetch polls when the widget is initialized
-    final pollsProvider = Provider.of<PollsProvider>(context, listen: false);
-    pollsProvider.fetchPolls(); // Fetch polls using the provider
+    // Fetch polls after the first frame is built
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      final pollsProvider = Provider.of<PollsProvider>(context, listen: false);
+      pollsProvider.fetchPolls(); // Fetch polls using the provider
+    });
   }
 
   @override
