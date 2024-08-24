@@ -23,7 +23,9 @@ class ProgressBar extends StatelessWidget {
               Icons.thumb_down,
               color: Colors.red,
             ),
-            SizedBox(width: 8,),
+            const SizedBox(
+              width: 8,
+            ),
             Expanded(
               child: SizedBox(
                 height: 12.0,
@@ -32,12 +34,14 @@ class ProgressBar extends StatelessWidget {
                   child: LinearProgressIndicator(
                     value: dislikePercentage,
                     backgroundColor: Colors.green.withOpacity(0.5),
-                    valueColor: AlwaysStoppedAnimation<Color>(Colors.red),
+                    valueColor: const AlwaysStoppedAnimation<Color>(Colors.red),
                   ),
                 ),
               ),
             ),
-            SizedBox(width: 8,),
+            const SizedBox(
+              width: 8,
+            ),
             const Icon(
               Icons.thumb_up,
               color: Colors.green,

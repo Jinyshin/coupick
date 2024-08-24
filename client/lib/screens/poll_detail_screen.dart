@@ -1,4 +1,7 @@
 import 'package:client/common/const/app_colors.dart';
+import 'package:client/screens/dislike_reaction_screen.dart';
+import 'package:client/screens/like_reaction_screen.dart';
+import 'package:client/screens/widgets/progressbar.dart';
 import 'package:flutter/material.dart';
 
 class PollDetailScreen extends StatelessWidget {
@@ -11,27 +14,21 @@ class PollDetailScreen extends StatelessWidget {
       appBar: AppBar(
         backgroundColor: Colors.white,
         elevation: 0,
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.close),
-            color: Colors.black,
-            onPressed: () {
-              Navigator.of(context).pop();
-            },
-          ),
-        ],
       ),
+      resizeToAvoidBottomInset: true,
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 16),
         child: Column(
           children: [
             Expanded(
-              flex: 3,
+              flex: 5,
               child: _ProductInfoSection(),
             ),
             Expanded(
-              flex: 2,
-              child: _ReactionSection(),
+              flex: 4,
+              child: SingleChildScrollView(
+                child: _ReactionSection(),
+              ),
             ),
           ],
         ),
@@ -54,9 +51,21 @@ class _ProductInfoSectionState extends State<_ProductInfoSection> {
     double screenWidth = MediaQuery.of(context).size.width;
 
     return Column(
+      mainAxisSize: MainAxisSize.min,
       children: [
-        Expanded(
-          flex: 4,
+        const Flexible(
+          flex: 1,
+          child: Text(
+            'What do you think of this ROKA T-shirt? I want to be a cool girl',
+            style: TextStyle(
+              color: Colors.black,
+              fontWeight: FontWeight.bold,
+              fontSize: 20,
+            ),
+          ),
+        ),
+        Flexible(
+          flex: 5,
           child: ClipRRect(
               borderRadius: BorderRadius.circular(16.0),
               child: Stack(
@@ -94,48 +103,44 @@ class _ProductInfoSectionState extends State<_ProductInfoSection> {
                       },
                     ),
                   ),
-                  Positioned(
-                    bottom: 8.0,
-                    left: 8.0,
-                    child: ElevatedButton(
-                      onPressed: () {
-                        // TODO: 'more info' 버튼이 눌렸을 때의 동작 추가
-                      },
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: AppColors.darkGray,
-                        foregroundColor: AppColors.white,
-                        padding: const EdgeInsets.fromLTRB(16, 8, 8, 8),
-                      ),
-                      child: const Row(
-                        children: [
-                          Text('more info'),
-                          SizedBox(width: 4.0),
-                          Icon(Icons.chevron_right),
-                        ],
-                      ),
-                    ),
-                  )
                 ],
               )),
         ),
-        const Expanded(
-          flex: 2,
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.start,
+        Flexible(
+          flex: 1,
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              Text(
+              const Text(
                 '₩ 18,000',
-                style: TextStyle(color: Colors.black, fontSize: 20),
+                style: TextStyle(
+                  fontSize: 18,
+                  color: Colors.black,
+                ),
               ),
-              SizedBox(
-                height: 16,
+              TextButton(
+                onPressed: () {},
+                style: TextButton.styleFrom(
+                  foregroundColor: Colors.black,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(12.0),
+                  ),
+                ),
+                child: const Row(
+                  children: [
+                    Text(
+                      'more info',
+                      style: TextStyle(
+                        fontSize: 18,
+                        color: Colors.black,
+                      ),
+                    ),
+                    SizedBox(width: 8.0),
+                    Icon(Icons.arrow_forward),
+                  ],
+                ),
               ),
-              Text(
-                'What do you think of this ROKA T-shirt? I want to be a cool girl',
-                style: TextStyle(color: Colors.black, fontSize: 20),
-              ),
-              SizedBox(height: 8),
             ],
           ),
         ),
@@ -153,6 +158,19 @@ class _ReactionSectionState extends State<_ReactionSection> {
   int currentIndex = 0;
 
   void _onSwipe(bool liked) {
+    if (liked) {
+      // 사용자가 '좋아요'로 스와이프한 경우
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => const LikeReactionScreen()),
+      );
+    } else {
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => const DisLikeReactionScreen()),
+      );
+    }
+
     setState(() {
       currentIndex++;
     });
@@ -178,7 +196,7 @@ class _ReactionSectionState extends State<_ReactionSection> {
               child: Column(
                 children: [
                   Container(
-                    padding: const EdgeInsets.all(16.0),
+                    padding: const EdgeInsets.all(12.0),
                     child: const Text(
                       'Reaction',
                       style: TextStyle(
@@ -196,8 +214,7 @@ class _ReactionSectionState extends State<_ReactionSection> {
                         return ListTile(
                           leading: const Icon(Icons.thumb_down,
                               color: AppColors.yellowLogoColor),
-                          title: Text('User $index'),
-                          subtitle: Text('This is the reaction of user $index'),
+                          title: Text('This is the reaction of user $index'),
                         );
                       },
                     ),
@@ -217,6 +234,8 @@ class _ReactionSectionState extends State<_ReactionSection> {
       mainAxisAlignment: MainAxisAlignment.start,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
+        const ProgressBar(likes: 80, dislikes: 20),
+        const SizedBox(height: 12),
         GestureDetector(
           onTap: () => _showReactions(context),
           child: const Text(

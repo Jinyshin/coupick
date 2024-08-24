@@ -13,12 +13,6 @@ class WishlistScreen extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
-        leading: IconButton(
-          icon: const Icon(Icons.chevron_left), // Left chevron button
-          onPressed: () {
-            Navigator.pop(context); // Navigate back to the previous screen
-          },
-        ),
         title: const Text('Select your coupick item:'),
       ),
       body: GridView.builder(
@@ -43,18 +37,24 @@ class WishlistScreen extends StatelessWidget {
               );
             },
             child: Container(
-              color: Colors.white, // Use a plain Container with no elevation or radius
+              color: Colors
+                  .white, // Use a plain Container with no elevation or radius
               child: Padding(
-                padding: const EdgeInsets.all(8.0), // Padding inside the Container for content
+                padding: const EdgeInsets.all(
+                    8.0), // Padding inside the Container for content
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisAlignment: MainAxisAlignment.start, // Align all content to the top
+                  mainAxisAlignment:
+                      MainAxisAlignment.start, // Align all content to the top
                   children: [
                     Container(
-                      width: double.infinity, // Ensure the image container stretches across the width
-                      height: 100, // Set a fixed height to make the container square
+                      width: double
+                          .infinity, // Ensure the image container stretches across the width
+                      height:
+                          100, // Set a fixed height to make the container square
                       decoration: BoxDecoration(
-                        color: Colors.grey[300], // Background color for the image placeholder
+                        color: Colors.grey[
+                            300], // Background color for the image placeholder
                       ),
                       child: product.imageUrl.isEmpty
                           ? Center(
@@ -71,14 +71,18 @@ class WishlistScreen extends StatelessWidget {
                               height: double.infinity,
                             ), // Show image when imageUrl is not empty
                     ),
-                    const SizedBox(height: 8), // Small gap between image and text
+                    const SizedBox(
+                        height: 8), // Small gap between image and text
                     Text(
                       product.name,
-                      style: const TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
+                      style: const TextStyle(
+                          fontSize: 14, fontWeight: FontWeight.bold),
                       maxLines: 2, // Restrict title to at most 2 lines
-                      overflow: TextOverflow.ellipsis, // Ellipsize overflowing text
+                      overflow:
+                          TextOverflow.ellipsis, // Ellipsize overflowing text
                     ),
-                    const SizedBox(height: 4), // Reduced gap between name and price
+                    const SizedBox(
+                        height: 4), // Reduced gap between name and price
                     Text(
                       product.price,
                       style: const TextStyle(
@@ -88,17 +92,20 @@ class WishlistScreen extends StatelessWidget {
                       ),
                     ),
                     if (product.isRocketShipping)
-                      Padding(
-                        padding: const EdgeInsets.only(top: 4), // Minimal padding above the shipping label
+                      const Padding(
+                        padding: EdgeInsets.only(
+                            top: 4), // Minimal padding above the shipping label
                         child: Row(
-                          children: const [
-                            Icon(Icons.rocket_launch, size: 16, color: Colors.blue),
+                          children: [
+                            Icon(Icons.rocket_launch,
+                                size: 16, color: Colors.blue),
                             SizedBox(width: 4),
                             Text(
                               '로켓배송',
                               style: TextStyle(
                                 color: Colors.blue,
-                                fontSize: 12, // Adjusted font size for shipping label
+                                fontSize:
+                                    12, // Adjusted font size for shipping label
                               ),
                             ),
                           ],
