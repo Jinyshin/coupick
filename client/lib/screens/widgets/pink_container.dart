@@ -3,6 +3,7 @@ import 'progressbar.dart';
 import 'package:client/utilities/calculate_vote.dart';
 import 'package:client/models/polls.dart';
 import 'package:client/common/const/app_colors.dart';
+import '../widgets/timer.dart';
 
 class PinkContainer extends StatelessWidget {
   final Poll poll;
@@ -93,13 +94,7 @@ class PinkContainer extends StatelessWidget {
                             ),
                           ),
                           const SizedBox(width: 5),
-                          Text(
-                            poll.timeLeft,
-                            style: const TextStyle(
-                              fontSize: 14,
-                              color: AppColors.redLogoColor,
-                            ),
-                          ),
+                          CountdownTimer(endTime: poll.createdAt.add(Duration(hours: 24))),
                         ],
                       ),
                       const SizedBox(height: 10),
