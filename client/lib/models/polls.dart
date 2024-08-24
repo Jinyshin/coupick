@@ -6,11 +6,11 @@ class Poll {
   final String content;
   final String thumbnail;
   final String coupangUrl;
-  final int likes;
-  final int dislikes;
+  int likes;
+  int dislikes;
   final bool isVoted;
-  final bool isLiked;
-  final bool isDisliked;
+  bool isLiked;
+  bool isDisliked;
   final List<Comment> comments;
   final DateTime createdAt;
   final DateTime updatedAt;

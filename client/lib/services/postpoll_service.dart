@@ -3,40 +3,44 @@ import 'package:http/http.dart' as http;
 import 'package:client/providers/shared_preference_service.dart';
 import 'package:flutter/material.dart';
 
-class SignupService {
+class PostPollService {
   final SharedPreferenceService _sharedPreferenceService = SharedPreferenceService();
 
-  Future<bool> signup(String username, BuildContext context) async {
-    final url = Uri.parse('http://43.203.238.127/users'); // 실제 API 엔드포인트로 대체
+  Future<bool> postPoll({
+    required String name,
+    required double price,
+    required String thumbnail,
+    required String content,
+    required String coupangUrl,
+    required BuildContext context,
+  }) async {
+    final url = Uri.parse('http://43.203.238.127/polls'); // Replace with the actual API endpoint
 
     try {
+      String? token = await _sharedPreferenceService.getToken();
+
+      if (token == null) {
+        _showErrorMessage(context, 'Token is not available. Please login again.');
+        return false;
+      }
+
       final response = await http.post(
         url,
         headers: {
+          'Authorization': 'Bearer $token',
           'Content-Type': 'application/json',
         },
-        body: jsonEncode({'name': username}), // "username" 대신 "name"으로 변경
+        body: jsonEncode({
+          'price': price,
+          'content': content,
+          'thumbnail': thumbnail,
+          'coupangUrl': coupangUrl,
+        }),
       );
 
-      if (response.statusCode == 200 || response.statusCode == 201) { // 200과 201 모두 성공 처리
-        final data = jsonDecode(response.body);
-        final accessToken = data['accessToken']; // "token" 대신 "accessToken" 사용
-
-        // 토큰 및 유저 이름을 SharedPreferences에 저장
-        await _sharedPreferenceService.saveToken(accessToken);
-        await _sharedPreferenceService.saveUsername(username);
-
-        // 성공시에도 로그에 출력
-        String? savedUsername = await _sharedPreferenceService.getUsername();
-        String? savedToken = await _sharedPreferenceService.getToken();
-
-        print('Saved Username: $savedUsername');
-        print('Saved Access Token: $savedToken');
-
-        // Display success Snackbar
-        _showSuccessMessage(context, 'Sign-up successful! Welcome, $username.');
-
-        return true; // 성공적으로 토큰을 받아 저장한 경우
+      if (response.statusCode == 200 || response.statusCode == 201) {
+        _showSuccessMessage(context, 'Post created successfully!');
+        return true;
       } else {
         _handleError(response, context);
         return false;
@@ -56,7 +60,7 @@ class SignupService {
     } else if (response.statusCode == 500) {
       message = 'Server error. Please try again later.';
     } else {
-      message = 'Failed to sign up. Please try again later.';
+      message = 'Failed to create post. Please try again later.';
     }
     _showErrorMessage(context, message);
   }
@@ -74,7 +78,7 @@ class SignupService {
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
         content: Text(message),
-        backgroundColor: Colors.green, // Green color for success
+        backgroundColor: Colors.green,
       ),
     );
   }
