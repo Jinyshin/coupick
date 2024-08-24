@@ -124,7 +124,12 @@ class _ReactionSectionState extends State<ReactionSection> {
         if (widget.comments.isNotEmpty)
           Row(
             children: [
-              const Icon(Icons.thumb_down, color: AppColors.yellowLogoColor),
+              Icon(
+                widget.comments[0].isLiked ? Icons.thumb_up : Icons.thumb_down,
+                color: widget.comments[0].isLiked
+                    ? AppColors.lightblueLogoColor
+                    : AppColors.yellowLogoColor,
+              ),
               const SizedBox(width: 8),
               Expanded(
                 child: Text(
