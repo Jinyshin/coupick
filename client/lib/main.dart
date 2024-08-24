@@ -37,10 +37,10 @@ class MyApp extends StatelessWidget {
             ),
             debugShowCheckedModeBanner: false,
             home: hasToken
-                ? const PollDetailScreen(
-                    pollId: 'he',
-                  )
-                // ? const ListViewVote()
+                // ? const PollDetailScreen(
+                //     pollId: 'he',
+                //   )
+                ? const ListViewVote()
                 : const UsernameCreationScreen(),
             routes: {
               '/vote': (context) => const ListViewVote(),
