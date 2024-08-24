@@ -105,8 +105,9 @@ class DisLikeReactionScreen extends StatelessWidget {
                     text: 'Skip', //이땐 "comment" 필드는 제외하고 post 전송
                     textColor: AppColors.darkGray,
                     backgroundColor: AppColors.faintGray,
-                    onPressed: () {
+                    onPressed: () async {
                       _submitReaction(context); // 댓글 없이 전송
+                      Navigator.pop(context, true);
                     },
                   ),
                   CustomElevatedButton(
@@ -114,8 +115,9 @@ class DisLikeReactionScreen extends StatelessWidget {
                     text: 'Done',
                     textColor: Colors.white,
                     backgroundColor: AppColors.primaryColor,
-                    onPressed: () {
+                    onPressed: () async {
                       _submitReaction(context, comment: commentController.text);
+                      Navigator.pop(context, true); // 현재 화면을 닫고 true를 반환
                     },
                   ),
                 ],

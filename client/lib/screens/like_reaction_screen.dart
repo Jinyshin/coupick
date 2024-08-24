@@ -99,8 +99,9 @@ class LikeReactionScreen extends StatelessWidget {
                     text: 'Skip',
                     textColor: AppColors.darkGray,
                     backgroundColor: AppColors.faintGray,
-                    onPressed: () {
+                    onPressed: () async {
                       _submitReaction(context); // 댓글 없이 전송
+                      Navigator.pop(context, true);
                     },
                   ),
                   CustomElevatedButton(
@@ -108,8 +109,9 @@ class LikeReactionScreen extends StatelessWidget {
                     text: 'Done',
                     textColor: Colors.white,
                     backgroundColor: AppColors.primaryColor,
-                    onPressed: () {
+                    onPressed: () async {
                       _submitReaction(context, comment: commentController.text);
+                      Navigator.pop(context, true);
                     },
                   ),
                 ],
