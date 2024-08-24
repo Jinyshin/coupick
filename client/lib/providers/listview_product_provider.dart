@@ -166,7 +166,7 @@ List<Poll> getProducts() {
       isLiked: false,
       isDisliked: false,
       comments: [],
-      createdAt: DateTime.now().subtract(Duration(hours: getRandomInt(1, 48))), // Random creation time within the last 48 hours
+      createdAt: DateTime.now().subtract(Duration(hours: getRandomInt(1, 24))), // Random creation time within the last 48 hours
       updatedAt: DateTime.now(),
     );
     products.add(poll);
