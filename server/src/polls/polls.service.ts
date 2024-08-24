@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { ForbiddenException, Injectable, UnauthorizedException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { Poll } from './polls.schema';
 import { Model } from 'mongoose';
@@ -13,7 +13,15 @@ export class PollsService {
   ) {}
 
   auth(token: string) {
-    return this.jwtService.verify(token?.substring(7)) as User;
+    if (!token) {
+      throw new UnauthorizedException();
+    }
+
+    try {
+      return this.jwtService.verify(token?.substring(7)) as User;
+    } catch (e) {
+      throw new ForbiddenException();
+    }
   }
 
   async listPolls(userId: string) {
