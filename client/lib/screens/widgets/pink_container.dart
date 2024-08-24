@@ -13,14 +13,13 @@ class PinkContainer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    int votePercentage = calculateVotePercentage(poll.likes, poll.dislikes);
 
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: Container(
         padding: const EdgeInsets.all(16.0),
         decoration: BoxDecoration(
-          color: Colors.pink[100],
+          // color: Colors.white,
           borderRadius: BorderRadius.circular(12),
         ),
         child: Column(
@@ -33,8 +32,8 @@ class PinkContainer extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Container(
-                      width: 80,
-                      height: 80,
+                      width: 130,
+                      height: 130,
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(12),
                         color: Colors.grey[300],
@@ -53,16 +52,29 @@ class PinkContainer extends StatelessWidget {
                         ),
                       ),
                     ),
-                    const SizedBox(height: 8),
-                    Text(
-                      poll.price,
-                      style: const TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.black,
-                      ),
-                    ),
-                  ],
+                  //   const SizedBox(height: 8),
+                  //   Row(
+                  //     children: [
+                  //       Text(
+                  //         poll.price,
+                  //         style: const TextStyle(
+                  //           fontSize: 16,
+                  //           fontWeight: FontWeight.bold,
+                  //           color: Colors.black,
+                  //         ),
+                  //       ),
+                  //       SizedBox(width: 5,),
+                  //       Text(
+                  //         '원',
+                  //         style: const TextStyle(
+                  //           fontSize: 16,
+                  //           fontWeight: FontWeight.bold,
+                  //           color: Colors.black,
+                  //         ),
+                  //       ),
+                  //     ],
+                  //   ),
+                   ],
                 ),
                 const SizedBox(width: 16),
                 // Right Column: Time, Topic
@@ -89,7 +101,7 @@ class PinkContainer extends StatelessWidget {
                           ),
                         ],
                       ),
-                      const SizedBox(height: 8),
+                      const SizedBox(height: 10),
                       Text(
                         poll.content,
                         style: const TextStyle(

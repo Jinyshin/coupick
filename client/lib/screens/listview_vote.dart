@@ -13,7 +13,7 @@ class ListViewVote extends StatelessWidget {
       Poll(
         id: '1',
         price: '20.00',
-        content: '이거 맛있음?',
+        content: '이거 맛있음? 먹어보고 싶은데 은근 호불호 갈려서 고민',
         thumbnail: 'https://via.placeholder.com/150',
         coupangUrl: '',
         likes: 150,
@@ -80,7 +80,17 @@ class ListViewVote extends StatelessWidget {
         itemCount: products.length,
         itemBuilder: (context, index) {
           final poll = products[index];
-          return PinkContainer(poll: poll);
+          return Column(
+            children: [
+              PinkContainer(poll: poll),
+              const Padding(
+                padding: EdgeInsets.symmetric(horizontal: 16.0), // 왼쪽, 오른쪽에 16의 패딩 추가
+                child: Divider(
+                  thickness: 1, // 두께를 1로 설정
+                ),
+              ),  // Divider 추가
+            ],
+          );
         },
       ),
       floatingActionButton: FloatingActionButton(
