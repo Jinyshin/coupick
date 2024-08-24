@@ -15,108 +15,138 @@ class WishlistScreen extends StatelessWidget {
       appBar: AppBar(
         title: const Text('Select your coupick item:'),
       ),
-      body: GridView.builder(
-        padding: EdgeInsets.zero, // Remove any padding from GridView
-        itemCount: productProvider.wishlist.length,
-        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-          crossAxisCount: 3, // Three columns per row
-          childAspectRatio: 0.5, // Adjust the aspect ratio to increase height
-          crossAxisSpacing: 0, // No spacing between columns
-          mainAxisSpacing: 0, // No spacing between rows
-        ),
-        itemBuilder: (context, index) {
-          final product = productProvider.wishlist[index];
-          return GestureDetector(
-            onTap: () {
-              productProvider.selectProduct(product);
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => const PostCreationScreen(),
+      body: Padding(
+        padding: const EdgeInsets.all(16.0), // Added padding around the entire GridView
+        child: GridView.builder(
+          itemCount: productProvider.wishlist.length,
+          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+            crossAxisCount: 2, // Two columns per row
+            childAspectRatio: 0.65, // Adjusted aspect ratio
+            crossAxisSpacing: 8, // Spacing between columns
+            mainAxisSpacing: 8, // Spacing between rows
+          ),
+          itemBuilder: (context, index) {
+            final product = productProvider.wishlist[index];
+            return GestureDetector(
+              onTap: () {
+                productProvider.selectProduct(product);
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const PostCreationScreen(),
+                  ),
+                );
+              },
+              child: Card(
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(12), // Rounded corners for the card
                 ),
-              );
-            },
-            child: Container(
-              color: Colors
-                  .white, // Use a plain Container with no elevation or radius
-              child: Padding(
-                padding: const EdgeInsets.all(
-                    8.0), // Padding inside the Container for content
+                elevation: 0, // Removed shadow by setting elevation to 0
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisAlignment:
-                      MainAxisAlignment.start, // Align all content to the top
                   children: [
-                    Container(
-                      width: double
-                          .infinity, // Ensure the image container stretches across the width
-                      height:
-                          100, // Set a fixed height to make the container square
-                      decoration: BoxDecoration(
-                        color: Colors.grey[
-                            300], // Background color for the image placeholder
-                      ),
-                      child: product.imageUrl.isEmpty
-                          ? Center(
-                              child: Icon(
-                                Icons.image,
-                                size: 50,
-                                color: Colors.grey[600],
-                              ), // Show placeholder icon when imageUrl is empty
-                            )
-                          : Image.network(
-                              product.imageUrl,
-                              fit: BoxFit.cover,
-                              width: double.infinity,
-                              height: double.infinity,
-                            ), // Show image when imageUrl is not empty
-                    ),
-                    const SizedBox(
-                        height: 8), // Small gap between image and text
-                    Text(
-                      product.name,
-                      style: const TextStyle(
-                          fontSize: 14, fontWeight: FontWeight.bold),
-                      maxLines: 2, // Restrict title to at most 2 lines
-                      overflow:
-                          TextOverflow.ellipsis, // Ellipsize overflowing text
-                    ),
-                    const SizedBox(
-                        height: 4), // Reduced gap between name and price
-                    Text(
-                      product.price,
-                      style: const TextStyle(
-                        color: Colors.red,
-                        fontSize: 18,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    if (product.isRocketShipping)
-                      const Padding(
-                        padding: EdgeInsets.only(
-                            top: 4), // Minimal padding above the shipping label
-                        child: Row(
+                    LayoutBuilder(
+                      builder: (context, constraints) {
+                        double width = constraints.maxWidth;
+                        return Stack(
                           children: [
-                            Icon(Icons.rocket_launch,
-                                size: 16, color: Colors.blue),
-                            SizedBox(width: 4),
-                            Text(
-                              '로켓배송',
-                              style: TextStyle(
-                                color: Colors.blue,
-                                fontSize:
-                                    12, // Adjusted font size for shipping label
+                            Container(
+                              width: width, // Set width to max width available
+                              height: width, // Set height equal to width to make it square
+                              child: ClipRRect(
+                                borderRadius: const BorderRadius.only(
+                                  topLeft: Radius.circular(12),
+                                  topRight: Radius.circular(12),
+                                ), // Rounded corners only at the top
+                                child: product.imageUrl.isEmpty
+                                    ? Center(
+                                        child: Icon(
+                                          Icons.image,
+                                          size: 50,
+                                          color: Colors.grey[600],
+                                        ), // Show placeholder icon when imageUrl is empty
+                                      )
+                                    : Image.network(
+                                        product.imageUrl,
+                                        fit: BoxFit.cover,
+                                        width: double.infinity,
+                                        height: double.infinity,
+                                      ), // Show image when imageUrl is not empty
+                              ),
+                            ),
+                            if (product.isRocketShipping)
+                              Positioned(
+                                top: 8,
+                                left: 8,
+                                child: Container(
+                                  padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 3),
+                                  decoration: BoxDecoration(
+                                    color: Colors.blue.withOpacity(0.7),
+                                    borderRadius: BorderRadius.circular(8),
+                                  ),
+                                  child: const Row(
+                                    children: [
+                                      Icon(
+                                        Icons.rocket_launch, // Rocket icon
+                                        size: 16,
+                                        color: Colors.white,
+                                      ),
+                                      SizedBox(width: 4),
+                                      Text(
+                                        '로켓배송',
+                                        style: TextStyle(
+                                          color: Colors.white,
+                                          fontSize: 14, // Increased font size for "로켓배송"
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                            const Positioned(
+                              top: 8,
+                              right: 8,
+                              child: Icon(
+                                Icons.favorite,
+                                color: Colors.red,
                               ),
                             ),
                           ],
+                        );
+                      },
+                    ),
+                    const SizedBox(height: 8), // Small gap between image and text
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                      child: Text(
+                        product.name,
+                        style: const TextStyle(
+                          fontSize: 16, // Increased font size for title
+                          fontWeight: FontWeight.bold,
+                        ),
+                        maxLines: 2, // Restrict title to at most 2 lines
+                        overflow: TextOverflow.ellipsis, // Ellipsize overflowing text
+                      ),
+                    ),
+                    const SizedBox(height: 4), // Reduced gap between name and price
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                      child: Text(
+                        product.price,
+                        style: const TextStyle(
+                          color: Colors.red,
+                          fontSize: 20, // Increased font size for price
+                          fontWeight: FontWeight.bold,
                         ),
                       ),
+                    ),
                   ],
                 ),
               ),
-            ),
-          );
-        },
+            );
+          },
+        ),
       ),
     );
   }

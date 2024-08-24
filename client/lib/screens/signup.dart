@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:client/services/signup_service.dart';
+import 'package:client/screens/listview_vote.dart';
 
 class UsernameCreationScreen extends StatefulWidget {
   const UsernameCreationScreen({super.key});
@@ -10,13 +11,23 @@ class UsernameCreationScreen extends StatefulWidget {
 
 class _UsernameCreationScreenState extends State<UsernameCreationScreen> {
   final TextEditingController _controller = TextEditingController();
+  final SignupService _signupService = SignupService();
 
-  Future<void> _saveUsername() async {
+  Future<void> _startCoupick() async {
     if (_controller.text.isNotEmpty) {
-      SharedPreferences prefs = await SharedPreferences.getInstance();
-      await prefs.setString('username', _controller.text);
-      await prefs.setString('token', 'your_generated_token'); // 토큰 저장
-      Navigator.pushReplacementNamed(context, '/vote');
+      bool success = await _signupService.signup(_controller.text, context);
+
+      if (success) {
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (context) => const ListViewVote()),
+        );
+      }
+    } else {
+      // 사용자에게 입력된 이름이 없을 때 알림
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Please enter a username')),
+      );
     }
   }
 
@@ -30,7 +41,7 @@ class _UsernameCreationScreenState extends State<UsernameCreationScreen> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Image.asset(
-              'assets/logo.png',
+              'assets/images/logo.png',
               height: 100, // 로고 이미지의 높이 조정
             ),
             const SizedBox(height: 20),
@@ -40,7 +51,7 @@ class _UsernameCreationScreenState extends State<UsernameCreationScreen> {
             ),
             const SizedBox(height: 20),
             ElevatedButton(
-              onPressed: _saveUsername,
+              onPressed: _startCoupick, // 백엔드 요청을 보내는 함수 호출
               child: const Text('Coupick 시작하기!'),
             ),
           ],

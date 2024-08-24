@@ -4,19 +4,40 @@ import 'package:flutter/material.dart';
 import './widgets/pink_container.dart';
 import '../models/polls.dart';
 
+import 'package:client/services/getpolls_service.dart'; // Import the GetPollsService
 import 'package:client/utilities/logout.dart';
+import './wishlist_screen.dart'; 
+import '../providers/listview_product_provider.dart';
+import './widgets/add_post.dart';
 
-import './wishlist_screen.dart'; // Import the WishlistScreen
-import '../providers/listview_product_provider.dart'; // Import the product provider
-
-class ListViewVote extends StatelessWidget {
+class ListViewVote extends StatefulWidget {
   const ListViewVote({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    // Use the getProducts function to get the list of Poll objects
-    final List<Poll> products = getProducts();
 
+  _ListViewVoteState createState() => _ListViewVoteState();
+}
+
+class _ListViewVoteState extends State<ListViewVote> {
+  late Future<List<Poll>> futurePolls;
+  late ScrollController _scrollController;
+
+
+  @override
+  void initState() {
+    super.initState();
+    futurePolls = GetPollsService().getPolls(); // Fetch polls from the API
+    _scrollController = ScrollController();
+  }
+
+  @override
+  void dispose() {
+    _scrollController.dispose(); // ScrollController 폐기
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: const Text('coupicks'),
@@ -24,7 +45,7 @@ class ListViewVote extends StatelessWidget {
           IconButton(
             icon: const Icon(Icons.notifications),
             onPressed: () {
-              // 알림 버튼 클릭 시 처리할 로직 (예: 알림 화면으로 이동)
+              // Handle notification button click (e.g., navigate to notifications screen)
             },
           ),
           IconButton(
@@ -35,47 +56,38 @@ class ListViewVote extends StatelessWidget {
           ),
         ],
       ),
-      body: ListView.builder(
-        itemCount: products.length,
-        itemBuilder: (context, index) {
-          final poll = products[index];
-          return Column(
-            children: [
-              InkWell(
-                onTap: () {
-                  // 각 아이템의 id 값을 사용하여 VotingDetailScreen으로 네비게이션
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => PollDetailScreen(pollId: poll.id),
-                    ),
-                  );
-                },
-                child: PinkContainer(poll: poll),
-              ),
-              const Padding(
-                padding: EdgeInsets.symmetric(horizontal: 16.0),
-                child: Divider(
-                  thickness: 1,
-                ),
-              ),
-            ],
-          );
+      body: FutureBuilder<List<Poll>>(
+        future: futurePolls,
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return const Center(child: CircularProgressIndicator());
+          } else if (snapshot.hasError) {
+            return Center(child: Text('Error: ${snapshot.error}'));
+          } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
+            return const Center(child: Text('No polls available'));
+          } else {
+            final products = snapshot.data!;
+            return ListView.builder(
+              itemCount: products.length,
+              itemBuilder: (context, index) {
+                final poll = products[index];
+                return Column(
+                  children: [
+                    PinkContainer(poll: poll),
+                    const Padding(
+                      padding: EdgeInsets.symmetric(horizontal: 16.0), // 왼쪽, 오른쪽에 16의 패딩 추가
+                      child: Divider(
+                        thickness: 1, // 두께를 1로 설정
+                      ),
+                    ), // Divider 추가
+                  ],
+                );
+              },
+            );
+          }
         },
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          // Navigate to WishlistScreen when FAB is pressed
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) => const WishlistScreen(),
-            ),
-          );
-        }, // Icon to display on the FAB
-        backgroundColor: AppColors.primaryColor,
-        child: const Icon(Icons.add), // Use colorScheme's primary color
-      ),
+      floatingActionButton: AddPostButton(scrollController: _scrollController),
     );
   }
 }

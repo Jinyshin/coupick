@@ -1,8 +1,131 @@
-import 'dart:math';
-import '../models/polls.dart';
+import { BadRequestException, Body, Controller, Delete, Get, Headers, Param, Post } from '@nestjs/common';
+import { PollsService } from './polls.service';
 
-// List of thumbnail images
-final List<String> thumbnailUrls = [
+@Controller('polls')
+export class PollsController {
+  constructor(
+    private readonly pollsService: PollsService
+  ) {}
+
+  @Get()
+  async listPolls(@Headers('Authorization') token?: string) {
+    const { _id } = this.pollsService.auth(token);
+    const polls = await this.pollsService.listPolls(_id as string);
+
+    return polls.map(({
+      likers,
+      dislikers,
+      comments,
+      ...others
+    }) => ({
+      ...others,
+      likes: likers.length,
+      dislikes: dislikers.length,
+      isVoted: [...likers, ...dislikers].includes(_id as string),
+      isLiked: likers.includes(_id as string),
+      isDisliked: dislikers.includes(_id as string),
+      comments: comments.map(({ name, content }) => ({ name, content }))
+    }))
+  }
+
+  @Post()
+  async createPoll(
+    @Headers('Authorization') token?: string,
+    @Body('price') price?: number,
+    @Body('content') content?: string,
+    @Body('thumbnail') thumbnail?: string,
+    @Body('coupangUrl') coupangUrl?: string
+  ) {
+    const { _id } = this.pollsService.auth(token);
+
+    if (!price || !content || !thumbnail || !coupangUrl) {
+      throw new BadRequestException();
+    }
+
+    return await this.pollsService.createPoll(price, content, thumbnail, coupangUrl);
+  }
+
+  @Post(':pollId/likes')
+  async likePoll(
+    @Param('pollId') pollId: string,
+    @Headers('Authorization') token?: string,
+    @Body('like') like?: boolean,
+    @Body('comment') comment?: string
+  ) {
+    const { _id, name } = this.pollsService.auth(token);
+
+    if (like === null || like === undefined) {
+      throw new BadRequestException();
+    }
+
+    await this.pollsService.likePoll(pollId, _id as string, name, like, comment);
+    return { status: 'success' };
+  }
+
+  @Delete()
+  async deletePollAll() {
+    await this.pollsService.deletePollAll();
+    return { status: 'success' };
+  }
+
+  @Post('dummy')
+  async dummy() {
+    const userIds = tokens.map((token) => {
+      const { _id } = this.pollsService.auth(`Bearer ${token}`);
+      return _id as string;
+    });
+    const itemIndices = [...thumbnails.keys()];
+    const item = Promise.all(
+      itemIndices.map((i) => {
+        const likes = Math.floor(Math.random() * tokens.length);
+        const dislikes = Math.floor(Math.random() * (tokens.length - likes));
+        const shuffledUserIds = [...userIds];
+        shuffledUserIds.sort((a, b) => Math.random() - 0.5);
+        const likers = shuffledUserIds.slice(0, likes);
+        const dislikers = shuffledUserIds.slice(likes, likes + dislikes);
+        return this.pollsService.createPoll(
+          (Math.floor(Math.random() * 27) + 3) * 1000,
+          contents[i % contents.length],
+          thumbnails[i & thumbnails.length],
+          coupangs[i % coupangs.length],
+          likers,
+          dislikers
+        );
+      })
+    );
+
+    return item;
+  }
+}
+
+
+const tokens = [
+  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NmM5Y2ZhZGNhZGQwZGViMTkwN2Y1NGEiLCJuYW1lIjoidXNlci0wIiwiY3JlYXRlZEF0IjoiMjAyNC0wOC0yNFQxMjoxODo1My44NjdaIiwidXBkYXRlZEF0IjoiMjAyNC0wOC0yNFQxMjoxODo1My44NjdaIiwiaWF0IjoxNzI0NTAxOTMzLCJleHAiOjE3MjQ1ODgzMzN9.3zfK7AVeS8n9kPj9hkESLYLoeuAMGhGRudDmgFzmEH0",
+  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NmM5Y2ZhZGNhZGQwZGViMTkwN2Y1NGIiLCJuYW1lIjoidXNlci0xIiwiY3JlYXRlZEF0IjoiMjAyNC0wOC0yNFQxMjoxODo1My44NjhaIiwidXBkYXRlZEF0IjoiMjAyNC0wOC0yNFQxMjoxODo1My44NjhaIiwiaWF0IjoxNzI0NTAxOTMzLCJleHAiOjE3MjQ1ODgzMzN9.uPTwHKfdK4VaC84KamFAtVvFTZyr5Cf8CZJxkeemZyQ",
+  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NmM5Y2ZhZGNhZGQwZGViMTkwN2Y1NGMiLCJuYW1lIjoidXNlci0yIiwiY3JlYXRlZEF0IjoiMjAyNC0wOC0yNFQxMjoxODo1My44NjhaIiwidXBkYXRlZEF0IjoiMjAyNC0wOC0yNFQxMjoxODo1My44NjhaIiwiaWF0IjoxNzI0NTAxOTMzLCJleHAiOjE3MjQ1ODgzMzN9.YgUlQD-HhQDAJVvSDw4Q6vf5fgoAXI_vaD5KeMHPxKc",
+  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NmM5Y2ZhZGNhZGQwZGViMTkwN2Y1NGQiLCJuYW1lIjoidXNlci0zIiwiY3JlYXRlZEF0IjoiMjAyNC0wOC0yNFQxMjoxODo1My44NjhaIiwidXBkYXRlZEF0IjoiMjAyNC0wOC0yNFQxMjoxODo1My44NjhaIiwiaWF0IjoxNzI0NTAxOTMzLCJleHAiOjE3MjQ1ODgzMzN9.PWeeB-bTD5kHoKFJWOZZftEwfzjumVHZrFNI4TsnBMw",
+  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NmM5Y2ZhZGNhZGQwZGViMTkwN2Y1NGUiLCJuYW1lIjoidXNlci00IiwiY3JlYXRlZEF0IjoiMjAyNC0wOC0yNFQxMjoxODo1My44NjlaIiwidXBkYXRlZEF0IjoiMjAyNC0wOC0yNFQxMjoxODo1My44NjlaIiwiaWF0IjoxNzI0NTAxOTMzLCJleHAiOjE3MjQ1ODgzMzN9.sVWH9IOuIKlE47SOETUjWbvthu7FDfaPkG7KI4gA6Mg",
+  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NmM5Y2ZhZGNhZGQwZGViMTkwN2Y1NGYiLCJuYW1lIjoidXNlci01IiwiY3JlYXRlZEF0IjoiMjAyNC0wOC0yNFQxMjoxODo1My44NjlaIiwidXBkYXRlZEF0IjoiMjAyNC0wOC0yNFQxMjoxODo1My44NjlaIiwiaWF0IjoxNzI0NTAxOTMzLCJleHAiOjE3MjQ1ODgzMzN9.05hN1NekMkCQnGK-2jv_aTCOjl3T4lOnyTG80Y1qfdg",
+  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NmM5Y2ZhZGNhZGQwZGViMTkwN2Y1NTAiLCJuYW1lIjoidXNlci02IiwiY3JlYXRlZEF0IjoiMjAyNC0wOC0yNFQxMjoxODo1My44NjlaIiwidXBkYXRlZEF0IjoiMjAyNC0wOC0yNFQxMjoxODo1My44NjlaIiwiaWF0IjoxNzI0NTAxOTMzLCJleHAiOjE3MjQ1ODgzMzN9.SMQYpn_4Z7CJ0xXR-je49MYOfSced0QKlIvYVEoW8g4",
+  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NmM5Y2ZhZGNhZGQwZGViMTkwN2Y1NTEiLCJuYW1lIjoidXNlci03IiwiY3JlYXRlZEF0IjoiMjAyNC0wOC0yNFQxMjoxODo1My44NjlaIiwidXBkYXRlZEF0IjoiMjAyNC0wOC0yNFQxMjoxODo1My44NjlaIiwiaWF0IjoxNzI0NTAxOTMzLCJleHAiOjE3MjQ1ODgzMzN9.ATSHPjlPvVVAiRNHnmk39Rycr7rJF54zV8GxGAlXKl0",
+  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NmM5Y2ZhZGNhZGQwZGViMTkwN2Y1NTIiLCJuYW1lIjoidXNlci04IiwiY3JlYXRlZEF0IjoiMjAyNC0wOC0yNFQxMjoxODo1My44NjlaIiwidXBkYXRlZEF0IjoiMjAyNC0wOC0yNFQxMjoxODo1My44NjlaIiwiaWF0IjoxNzI0NTAxOTMzLCJleHAiOjE3MjQ1ODgzMzN9.kgKeBYtZ-TX_hwvYqEFQjhrdV0WJNgNqtB2P4I8rqe8",
+  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NmM5Y2ZhZGNhZGQwZGViMTkwN2Y1NTMiLCJuYW1lIjoidXNlci05IiwiY3JlYXRlZEF0IjoiMjAyNC0wOC0yNFQxMjoxODo1My44NjlaIiwidXBkYXRlZEF0IjoiMjAyNC0wOC0yNFQxMjoxODo1My44NjlaIiwiaWF0IjoxNzI0NTAxOTMzLCJleHAiOjE3MjQ1ODgzMzN9.i9F7WxV0BkKuZcQh-Qm1EQFvUH3emUgnNb5asayodRU"
+];
+
+const contents = [
+  '이거 맛있음? 먹어보고 싶은데 은근 호불호 갈려서 고민',
+  '이거 사야할까?',
+  '이게 제일 좋아요!',
+  '정말 필요한가요?',
+  '다른 옵션도 고려해야 할까요?',
+  '구매해도 괜찮을까요? 의견 부탁드립니다!',
+  '이 제품 사용해보신 분 있나요?',
+  '할인 중인데 놓치기 싫어요!',
+  '이게 요즘 핫하다고 들었는데, 사실인가요?',
+  '비슷한 다른 제품과 비교해 주세요!',
+];
+
+const thumbnails = [
   'https://thumbnail7.coupangcdn.com/thumbnails/remote/230x230ex/image/retail/images/2024/08/08/12/9/18e1b42f-ccae-4f5b-9297-a485883d21ea.jpg',
   'https://thumbnail6.coupangcdn.com/thumbnails/remote/230x230ex/image/retail/images/3504271989628902-609995cb-828f-47c9-ab69-1af693e2df83.jpg',
   'https://thumbnail10.coupangcdn.com/thumbnails/remote/230x230ex/image/retail/images/2112670178598945-1a724b75-8843-4cd9-b7c4-facdc9329799.jpg',
@@ -65,8 +188,7 @@ final List<String> thumbnailUrls = [
   'https://thumbnail10.coupangcdn.com/thumbnails/remote/230x230ex/image/retail/images/2024/03/20/12/0/234f41cd-da4f-446a-901e-29cc25c62b2e.jpg'
 ];
 
-// List of Coupang URLs
-final List<String> coupangUrls = [
+const coupangs = [
   'coupang.com/vp/products/8276936800?itemId=23859265896&amp;vendorItemId=90882516925&amp;sourceType=CAMPAIGN&amp;campaignId=82&amp;categoryId=0',
   'coupang.com/vp/products/6183362397?itemId=16469986383&amp;vendorItemId=88342490302&amp;sourceType=CAMPAIGN&amp;campaignId=82&amp;categoryId=0',
   'coupang.com/vp/products/7361255527?itemId=18966078747&amp;vendorItemId=86091839482&amp;sourceType=CAMPAIGN&amp;campaignId=82&amp;categoryId=0',
@@ -129,48 +251,3 @@ final List<String> coupangUrls = [
   'coupang.com/vp/products/8059505711?itemId=22087222373&amp;vendorItemId=89134250487&amp;sourceType=CAMPAIGN&amp;campaignId=82&amp;categoryId=0',
   'coupang.com/vp/products/8059505711?itemId=22087222373&amp;vendorItemId=89134250487&amp;sourceType=CAMPAIGN&amp;campaignId=82&amp;categoryId=0'
 ];
-
-final List<String> pollContents = [
-  '이거 맛있음? 먹어보고 싶은데 은근 호불호 갈려서 고민',
-  '이거 사야할까?',
-  '이게 제일 좋아요!',
-  '정말 필요한가요?',
-  '다른 옵션도 고려해야 할까요?',
-  '구매해도 괜찮을까요? 의견 부탁드립니다!',
-  '이 제품 사용해보신 분 있나요?',
-  '할인 중인데 놓치기 싫어요!',
-  '이게 요즘 핫하다고 들었는데, 사실인가요?',
-  '비슷한 다른 제품과 비교해 주세요!',
-];
-
-// Generate a random integer within a range
-int getRandomInt(int min, int max) {
-  final random = Random();
-  return min + random.nextInt(max - min);
-}
-
-// Function to generate mock Poll data
-List<Poll> getProducts() {
-  final List<Poll> products = [];
-
-  for (int i = 0; i < thumbnailUrls.length; i++) {
-    final poll = Poll(
-      id: (i + 1).toString(),
-      price: getRandomInt(1000, 100000).toDouble(),
-      content: pollContents[getRandomInt(0, pollContents.length)], // Random content from the list
-      thumbnail: thumbnailUrls[i],
-      coupangUrl: coupangUrls[i],
-      likes: getRandomInt(10, 100), // Random likes between 50 and 500
-      dislikes: getRandomInt(10, 100), // Random dislikes between 10 and 100
-      isVoted: false,
-      isLiked: false,
-      isDisliked: false,
-      comments: [],
-      createdAt: DateTime.now().subtract(Duration(hours: getRandomInt(1, 24))), // Random creation time within the last 48 hours
-      updatedAt: DateTime.now(),
-    );
-    products.add(poll);
-  }
-
-  return products;
-}

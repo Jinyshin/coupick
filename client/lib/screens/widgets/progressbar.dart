@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:client/common/const/app_colors.dart'; // Import your app colors
 
 class ProgressBar extends StatelessWidget {
   final int likes;
@@ -14,44 +15,86 @@ class ProgressBar extends StatelessWidget {
   Widget build(BuildContext context) {
     int totalVotes = likes + dislikes;
     double dislikePercentage = totalVotes > 0 ? dislikes / totalVotes : 0.0;
+    double likePercentage = totalVotes > 0 ? likes / totalVotes : 0.0;
 
     return Column(
       children: [
         Row(
           children: [
-            const Icon(
+            Icon(
               Icons.thumb_down,
-              color: Colors.red,
+              color: dislikePercentage > 0.5
+                  ? AppColors.yellowLogoColor
+                  : AppColors.extraLightGray, // 흐리게
             ),
-            const SizedBox(
-              width: 8,
-            ),
+            const SizedBox(width: 8),
             Expanded(
-              child: SizedBox(
-                height: 12.0,
-                child: ClipRRect(
-                  borderRadius: BorderRadius.circular(6.0),
-                  child: LinearProgressIndicator(
-                    value: dislikePercentage,
-                    backgroundColor: Colors.green.withOpacity(0.5),
-                    valueColor: const AlwaysStoppedAnimation<Color>(Colors.red),
+              child: Stack(
+                alignment: Alignment.center, // 텍스트를 중앙에 정렬
+                children: [
+                  SizedBox(
+                    height: 20.0,
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(6.0),
+                      child: dislikePercentage > 0.5
+                          ? LinearProgressIndicator(
+                        value: dislikePercentage,
+                        backgroundColor: AppColors.extraLightGray,
+                        valueColor: const AlwaysStoppedAnimation<Color>(AppColors.yellowLogoColor),
+                      )
+                          : Transform(
+                        alignment: Alignment.center,
+                        transform: Matrix4.identity()..scale(-1.0, 1.0),
+                        child: LinearProgressIndicator(
+                          value: likePercentage,
+                          backgroundColor: AppColors.extraLightGray,
+                          valueColor: const AlwaysStoppedAnimation<Color>(AppColors.lightblueLogoColor),
+                        ),
+                      ),
+                    ),
                   ),
-                ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+
+                      Padding(
+                        padding: const EdgeInsets.only(left: 8.0),
+                        child: Text(
+                          '${(dislikePercentage * 100).toStringAsFixed(1)}%',
+                          style: TextStyle(
+                            fontSize: 11,
+                            color: Colors.white,
+                          ),
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.only(right: 8.0),
+                        child: Text(
+                          '${(likePercentage * 100).toStringAsFixed(1)}%',
+                          style: TextStyle(
+                            fontSize: 11,
+                            color: Colors.white,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
               ),
             ),
-            const SizedBox(
-              width: 8,
-            ),
-            const Icon(
+            const SizedBox(width: 8),
+            Icon(
               Icons.thumb_up,
-              color: Colors.green,
+              color: likePercentage > 0.5
+                  ? AppColors.lightblueLogoColor
+                  : AppColors.extraLightGray, // 흐리게
             ),
           ],
         ),
         const SizedBox(height: 8),
         Text(
           '$totalVotes명의 사람들이 투표 참여중!',
-          style: const TextStyle(fontSize: 14, color: Colors.black54),
+          style: const TextStyle(fontSize: 14, color: AppColors.middleGray),
         ),
       ],
     );

@@ -24,6 +24,10 @@ class SharedPreferenceService {
     await prefs.remove('token');
   }
 
+  Future<String?> getToken() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    return prefs.getString('token');
+  }
 
 //저장해두었던 유저네임도 삭제
   Future<void> removeUsername() async {
