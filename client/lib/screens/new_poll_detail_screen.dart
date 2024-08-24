@@ -64,7 +64,10 @@ class _ExamplePageState extends State<Example> {
                       final result = await Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => const DisLikeReactionScreen(),
+                          // TODO: handle pollId
+                          builder: (context) => const DisLikeReactionScreen(
+                            pollId: '',
+                          ),
                         ),
                       );
 
@@ -85,8 +88,10 @@ class _ExamplePageState extends State<Example> {
                     onPressed: () async {
                       final result = await Navigator.push(
                         context,
+                        // TODO: handle pollId
                         MaterialPageRoute(
-                          builder: (context) => const LikeReactionScreen(),
+                          builder: (context) =>
+                              const LikeReactionScreen(pollId: ''),
                         ),
                       );
 
