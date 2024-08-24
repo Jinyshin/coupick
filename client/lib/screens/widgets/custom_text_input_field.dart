@@ -3,10 +3,12 @@ import 'package:flutter/material.dart';
 class CustomTextInputField extends StatefulWidget {
   final int? maxInputCharacters;
   final String hintString;
+  final TextEditingController? controller; // Allow passing a controller
 
   const CustomTextInputField({
     this.maxInputCharacters,
     required this.hintString,
+    this.controller, // Optional controller parameter
   });
 
   @override
@@ -20,7 +22,8 @@ class _CustomTextInputFieldState extends State<CustomTextInputField> {
   @override
   void initState() {
     super.initState();
-    _controller = TextEditingController();
+    _controller = widget.controller ?? TextEditingController(); // Use provided controller or create a new one
+
     _controller.addListener(() {
       setState(() {
         _currentCharacterCount = _controller.text.length;
@@ -30,7 +33,10 @@ class _CustomTextInputFieldState extends State<CustomTextInputField> {
 
   @override
   void dispose() {
-    _controller.dispose();
+    if (widget.controller == null) {
+      // Only dispose if the controller is internally created
+      _controller.dispose();
+    }
     super.dispose();
   }
 
@@ -44,7 +50,7 @@ class _CustomTextInputFieldState extends State<CustomTextInputField> {
           maxLength: widget.maxInputCharacters,
           decoration: InputDecoration(
             hintText: widget.hintString,
-            border: const OutlineInputBorder(),
+            border: const UnderlineInputBorder(),
             counterText: '', // Hide the default counter text
           ),
         ),

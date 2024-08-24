@@ -27,7 +27,7 @@ class DisLikeReactionScreen extends StatelessWidget {
                   children: [
                     SizedBox(height: 60),
                     Icon(
-                      Icons.thumb_up,
+                      Icons.thumb_down,
                       size: 80,
                       color: AppColors.yellowLogoColor,
                     ),

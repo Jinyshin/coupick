@@ -4,9 +4,14 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart'; // Provider import
 import './widgets/pink_container.dart';
 import '../models/polls.dart';
+
 import 'package:client/utilities/logout.dart';
 import './wishlist_screen.dart';
 import '../providers/pollsprovider.dart'; // PollsProvider import
+
+import 'package:client/services/getpolls_service.dart'; // Import the GetPollsService
+
+
 import './widgets/add_post.dart';
 
 class ListViewVote extends StatefulWidget {
@@ -31,8 +36,14 @@ class _ListViewVoteState extends State<ListViewVote> {
 
   @override
   void dispose() {
-    _scrollController.dispose(); // ScrollController 폐기
+    _scrollController.dispose(); // Dispose of the ScrollController
     super.dispose();
+  }
+
+  Future<void> _reloadPolls() async {
+    setState(() {
+      futurePolls = GetPollsService().getPolls(); // Reload polls from the API
+    });
   }
 
   @override
@@ -55,6 +66,7 @@ class _ListViewVoteState extends State<ListViewVote> {
           ),
         ],
       ),
+
       body: Consumer<PollsProvider>(
         builder: (context, pollsProvider, child) {
           if (pollsProvider.isLoading) {
@@ -73,6 +85,7 @@ class _ListViewVoteState extends State<ListViewVote> {
                 return Column(
                   children: [
                     GestureDetector(
+
                       onTap: () {
                         // PollDetailScreen으로 네비게이트, pollId 전달
                         Navigator.push(
@@ -92,14 +105,15 @@ class _ListViewVoteState extends State<ListViewVote> {
                         thickness: 1, // 두께를 1로 설정
                       ),
                     ), // Divider 추가
-                  ],
-                );
-              },
-            );
-          }
-        },
+                    ],
+                  );
+                },
+              );
+            }
+          },
+        ),
       ),
-      floatingActionButton: AddPostButton(scrollController: _scrollController),
+      floatingActionButton: AddPostButton(scrollController: _scrollController), // Pass ScrollController to the button
     );
   }
 }
