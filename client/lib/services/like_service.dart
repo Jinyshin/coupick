@@ -23,7 +23,6 @@ class LikeService {
 
     // Body 데이터 로그 출력
     print('Sending POST request to $url with body: $body');
-    print('Seeeeeeeending POST request to $url');
 
 
     final response = await http.post(

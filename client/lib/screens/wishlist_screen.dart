@@ -21,7 +21,7 @@ class WishlistScreen extends StatelessWidget {
           itemCount: productProvider.wishlist.length,
           gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
             crossAxisCount: 2, // Two columns per row
-            childAspectRatio: 0.65, // Adjusted aspect ratio
+            childAspectRatio: 0.6, // Adjusted aspect ratio
             crossAxisSpacing: 8, // Spacing between columns
             mainAxisSpacing: 8, // Spacing between rows
           ),

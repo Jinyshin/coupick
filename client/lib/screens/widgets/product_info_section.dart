@@ -111,9 +111,12 @@ class _ProductInfoSectionState extends State<ProductInfoSection> {
               TextButton(
                 onPressed: () async {
                   final url = Uri.parse(widget.coupangUrl);
+                  print('Attempting to launch $url');
                   if (await canLaunchUrl(url)) {
-                    await launchUrl(url);
+                    await launchUrl(url, mode: LaunchMode.externalApplication);
+                    print('Launch successful');
                   } else {
+                    print('Could not launch $url');
                     throw 'Could not launch $url';
                   }
                 },
