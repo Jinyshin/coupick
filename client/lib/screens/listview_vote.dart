@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import './widgets/pink_container.dart';
 import '../models/polls.dart';
+import './wishlist_screen.dart'; // Import the WishlistScreen
 
 class ListViewVote extends StatelessWidget {
   const ListViewVote({super.key});
@@ -81,6 +82,19 @@ class ListViewVote extends StatelessWidget {
           final poll = products[index];
           return PinkContainer(poll: poll);
         },
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          // Navigate to WishlistScreen when FAB is pressed
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => const WishlistScreen(),
+            ),
+          );
+        },
+        child: const Icon(Icons.add), // Icon to display on the FAB
+        backgroundColor: Theme.of(context).colorScheme.primary, // Use colorScheme's primary color
       ),
     );
   }
