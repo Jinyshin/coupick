@@ -14,7 +14,7 @@ export class UsersService {
   async createUser(name: string) {
     const { _id, createdAt, updatedAt } = await this.userModel.create({ name });
 
-    return await this.jwtService.sign({
+    return this.jwtService.sign({
       _id,
       name,
       createdAt: createdAt.toISOString(),

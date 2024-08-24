@@ -8,10 +8,17 @@ import { JwtModule } from '@nestjs/jwt';
 
 @Module({
   imports: [
-    JwtModule.register({
+    // JwtModule.register({
+    //   global: true,
+      // secret: 'hello world',
+      // signOptions: { expiresIn: '1d' }
+    // }),
+    JwtModule.registerAsync({
       global: true,
-      secret: 'hello world',
-      signOptions: { expiresIn: '1d' }
+      useFactory: async () => ({
+        secret: 'hello world',
+        signOptions: { expiresIn: '1d' }
+      })
     }),
     MongooseModule.forRoot('mongodb://coupick:coupick@localhost:27017'), UsersModule, PollsModule
   ],
