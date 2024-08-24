@@ -35,6 +35,26 @@ export class PollsService {
     ]) as Poll[];
   }
 
+  async createPoll(
+    price: number,
+    content: string,
+    thumbnail: string,
+    coupangUrl: string,
+    likers: string[] = [],
+    dislikers: string[] = []
+  ) {
+    const poll = await this.pollModel.create({
+      price,
+      content,
+      thumbnail,
+      coupangUrl,
+      likers,
+      dislikers
+    });
+
+    return poll;
+  }
+
   async deletePollAll() {
     await this.pollModel.deleteMany({});
   }
