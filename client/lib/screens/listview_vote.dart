@@ -6,7 +6,7 @@ import '../models/polls.dart';
 
 import 'package:client/services/getpolls_service.dart'; // Import the GetPollsService
 import 'package:client/utilities/logout.dart';
-import './wishlist_screen.dart'; 
+import './wishlist_screen.dart';
 import '../providers/listview_product_provider.dart';
 import './widgets/add_post.dart';
 
@@ -14,14 +14,12 @@ class ListViewVote extends StatefulWidget {
   const ListViewVote({super.key});
 
   @override
-
   _ListViewVoteState createState() => _ListViewVoteState();
 }
 
 class _ListViewVoteState extends State<ListViewVote> {
   late Future<List<Poll>> futurePolls;
   late ScrollController _scrollController;
-
 
   @override
   void initState() {
@@ -73,9 +71,22 @@ class _ListViewVoteState extends State<ListViewVote> {
                 final poll = products[index];
                 return Column(
                   children: [
-                    PinkContainer(poll: poll),
+                    GestureDetector(
+                      onTap: () {
+                        // PollDetailScreen으로 네비게이트, pollId 전달
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) =>
+                                PollDetailScreen(pollId: poll.id),
+                          ),
+                        );
+                      },
+                      child: PinkContainer(poll: poll),
+                    ),
                     const Padding(
-                      padding: EdgeInsets.symmetric(horizontal: 16.0), // 왼쪽, 오른쪽에 16의 패딩 추가
+                      padding: EdgeInsets.symmetric(
+                          horizontal: 16.0), // 왼쪽, 오른쪽에 16의 패딩 추가
                       child: Divider(
                         thickness: 1, // 두께를 1로 설정
                       ),
