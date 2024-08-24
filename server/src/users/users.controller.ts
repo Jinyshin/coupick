@@ -21,4 +21,10 @@ export class UsersController {
     await this.usersService.deleteUserAll();
     return { status: 'success' };
   }
+
+  @Post('dummy')
+  async dummy() {
+    const indices = [...Array(10).keys()];
+    return Promise.all(indices.map((i) => this.createUser(`user-${i}`)))
+  }
 }
