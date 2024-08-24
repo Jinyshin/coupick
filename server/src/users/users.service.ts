@@ -9,8 +9,13 @@ export class UsersService {
   constructor(private readonly jwtService: JwtService, @InjectModel(User.name) private userModel: Model<User>) {}
 
   async createUser(name: string) {
-    const user = await this.userModel.create({ name });
+    const { _id, createdAt, updatedAt } = await this.userModel.create({ name });
 
-    return await this.jwtService.sign(user);
+    return await this.jwtService.sign({
+      _id,
+      name,
+      createdAt: createdAt.toISOString(),
+      updatedAt: updatedAt.toISOString()
+    });
   }
 }

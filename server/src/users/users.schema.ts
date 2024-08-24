@@ -1,14 +1,16 @@
-import { Prop, Schema, SchemaFactory, SchemaOptions } from "@nestjs/mongoose";
+import { Prop, Schema, SchemaFactory } from "@nestjs/mongoose";
 import { Document } from "mongoose";
 
-const options: SchemaOptions = {
-  timestamps: true
-};
-
-@Schema(options)
+@Schema({ timestamps: true })
 export class User extends Document {
   @Prop({ required: true })
   name: string;
+
+  @Prop({ required: true })
+  createdAt: Date;
+
+  @Prop({ required: true })
+  updatedAt: Date;
 }
 
 export const UserSchema = SchemaFactory.createForClass(User);
