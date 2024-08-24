@@ -79,7 +79,8 @@ export class PollsService {
       updateQuery['$push']['comments'] = {
         userId,
         name,
-        content: comment
+        content: comment,
+        isLiked: like
       };
     }
 

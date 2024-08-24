@@ -110,7 +110,7 @@ export class PollsController {
         return this.pollsService.createPoll(
           (Math.floor(Math.random() * 27) + 3) * 1000,
           contents[i % contents.length],
-          thumbnails[i & thumbnails.length],
+          thumbnails[i % thumbnails.length],
           'https://www.' + coupangs[i % coupangs.length],
           likers,
           dislikers
