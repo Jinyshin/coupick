@@ -1,17 +1,12 @@
 import 'package:client/common/const/app_colors.dart';
 import 'package:client/screens/poll_detail_screen.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart'; // Provider import
+import 'package:provider/provider.dart';
 import './widgets/pink_container.dart';
 import '../models/polls.dart';
-
 import 'package:client/utilities/logout.dart';
 import './wishlist_screen.dart';
-import '../providers/pollsprovider.dart'; // PollsProvider import
-
-import 'package:client/services/getpolls_service.dart'; // Import the GetPollsService
-
-
+import '../providers/pollsprovider.dart';
 import './widgets/add_post.dart';
 
 class ListViewVote extends StatefulWidget {
@@ -41,9 +36,8 @@ class _ListViewVoteState extends State<ListViewVote> {
   }
 
   Future<void> _reloadPolls() async {
-    setState(() {
-      futurePolls = GetPollsService().getPolls(); // Reload polls from the API
-    });
+    final pollsProvider = Provider.of<PollsProvider>(context, listen: false);
+    await pollsProvider.fetchPolls(); // Reload polls using the provider
   }
 
   @override
@@ -66,45 +60,44 @@ class _ListViewVoteState extends State<ListViewVote> {
           ),
         ],
       ),
-
-      body: Consumer<PollsProvider>(
-        builder: (context, pollsProvider, child) {
-          if (pollsProvider.isLoading) {
-            return const Center(child: CircularProgressIndicator());
-          } else if (pollsProvider.hasError) {
-            return Center(child: Text('Error: ${pollsProvider.errorMessage}'));
-          } else if (pollsProvider.polls.isEmpty) {
-            return const Center(child: Text('No polls available'));
-          } else {
-            final products = pollsProvider.polls;
-            return ListView.builder(
-              controller: _scrollController,
-              itemCount: products.length,
-              itemBuilder: (context, index) {
-                final poll = products[index];
-                return Column(
-                  children: [
-                    GestureDetector(
-
-                      onTap: () {
-                        // PollDetailScreen으로 네비게이트, pollId 전달
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) =>
-                                PollDetailScreen(pollId: poll.id),
-                          ),
-                        );
-                      },
-                      child: PinkContainer(poll: poll),
-                    ),
-                    const Padding(
-                      padding: EdgeInsets.symmetric(
-                          horizontal: 16.0), // 왼쪽, 오른쪽에 16의 패딩 추가
-                      child: Divider(
-                        thickness: 1, // 두께를 1로 설정
+      body: RefreshIndicator(
+        onRefresh: _reloadPolls, // Define the function to reload the list
+        child: Consumer<PollsProvider>(
+          builder: (context, pollsProvider, child) {
+            if (pollsProvider.isLoading) {
+              return const Center(child: CircularProgressIndicator());
+            } else if (pollsProvider.hasError) {
+              return Center(child: Text('Error: ${pollsProvider.errorMessage}'));
+            } else if (pollsProvider.polls.isEmpty) {
+              return const Center(child: Text('No polls available'));
+            } else {
+              final products = pollsProvider.polls;
+              return ListView.builder(
+                controller: _scrollController,
+                itemCount: products.length,
+                itemBuilder: (context, index) {
+                  final poll = products[index];
+                  return Column(
+                    children: [
+                      GestureDetector(
+                        onTap: () {
+                          // PollDetailScreen으로 네비게이트, pollId 전달
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) =>
+                                  PollDetailScreen(pollId: poll.id),
+                            ),
+                          );
+                        },
+                        child: PinkContainer(poll: poll),
                       ),
-                    ), // Divider 추가
+                      const Padding(
+                        padding: EdgeInsets.symmetric(horizontal: 16.0), // 왼쪽, 오른쪽에 16의 패딩 추가
+                        child: Divider(
+                          thickness: 1, // 두께를 1로 설정
+                        ),
+                      ), // Divider 추가
                     ],
                   );
                 },
