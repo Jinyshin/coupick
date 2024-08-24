@@ -2,75 +2,15 @@ import 'package:flutter/material.dart';
 import './widgets/pink_container.dart';
 import '../models/polls.dart';
 import './wishlist_screen.dart'; // Import the WishlistScreen
+import '../providers/listview_product_provider.dart'; // Import the product provider
 
 class ListViewVote extends StatelessWidget {
   const ListViewVote({super.key});
 
   @override
   Widget build(BuildContext context) {
-    // 샘플 상품 데이터를 Poll 객체로 변환
-    final List<Poll> products = [
-      Poll(
-        id: '1',
-        price: '20.00',
-        content: '이거 맛있음? 먹어보고 싶은데 은근 호불호 갈려서 고민',
-        thumbnail: 'https://via.placeholder.com/150',
-        coupangUrl: '',
-        likes: 150,
-        dislikes: 50,
-        isVoted: false,
-        isLiked: false,
-        isDisliked: false,
-        comments: [],
-        createdAt: DateTime.now().subtract(Duration(hours: 2)),
-        updatedAt: DateTime.now(),
-      ),
-      Poll(
-        id: '2',
-        price: '35.00',
-        content: '이거 사야할까?',
-        thumbnail: 'https://via.placeholder.com/150',
-        coupangUrl: '',
-        likes: 200,
-        dislikes: 100,
-        isVoted: false,
-        isLiked: false,
-        isDisliked: false,
-        comments: [],
-        createdAt: DateTime.now().subtract(Duration(hours: 2)),
-        updatedAt: DateTime.now(),
-      ),
-      Poll(
-        id: '3',
-        price: '50.00',
-        content: '이게 제일 좋아요!',
-        thumbnail: 'https://via.placeholder.com/150',
-        coupangUrl: '',
-        likes: 300,
-        dislikes: 50,
-        isVoted: false,
-        isLiked: false,
-        isDisliked: false,
-        comments: [],
-        createdAt: DateTime.now().subtract(Duration(hours: 2)),
-        updatedAt: DateTime.now(),
-      ),
-      Poll(
-        id: '4',
-        price: '40.00',
-        content: '정말 필요한가요?',
-        thumbnail: 'https://via.placeholder.com/150',
-        coupangUrl: '',
-        likes: 250,
-        dislikes: 25,
-        isVoted: false,
-        isLiked: false,
-        isDisliked: false,
-        comments: [],
-        createdAt: DateTime.now().subtract(Duration(hours: 2)),
-        updatedAt: DateTime.now(),
-      ),
-    ];
+    // Use the getProducts function to get the list of Poll objects
+    final List<Poll> products = getProducts();
 
     return Scaffold(
       appBar: AppBar(
