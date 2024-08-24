@@ -30,7 +30,7 @@ class _UsernameCreationScreenState extends State<UsernameCreationScreen> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Image.asset(
-              'assets/logo.png',
+              'assets/images/logo.png',
               height: 100, // 로고 이미지의 높이 조정
             ),
             const SizedBox(height: 20),
