@@ -40,7 +40,7 @@ export class PollsController {
     return { status: 'success' };
   }
 
-  @Post()
+  @Post('dummy')
   async dummy() {
     const userIds = tokens.map((token) => {
       const { _id } = this.pollsService.auth(`Bearer ${token}`);
