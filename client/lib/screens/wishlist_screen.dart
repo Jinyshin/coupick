@@ -133,7 +133,7 @@ class WishlistScreen extends StatelessWidget {
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 8.0),
                       child: Text(
-                        product.price,
+                        product.price.toString() + '원',
                         style: const TextStyle(
                           color: Colors.red,
                           fontSize: 20, // Increased font size for price

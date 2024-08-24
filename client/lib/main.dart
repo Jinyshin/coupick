@@ -1,3 +1,5 @@
+import 'package:client/common/const/app_colors.dart';
+import 'package:client/screens/voting_detail_screen.dart';
 import 'package:client/screens/poll_detail_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -32,7 +34,7 @@ class MyApp extends StatelessWidget {
           return MaterialApp(
             title: 'Coupick App',
             theme: ThemeData(
-              colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
+              colorScheme: ColorScheme.fromSeed(seedColor: AppColors.primaryColor),
               useMaterial3: true,
             ),
             debugShowCheckedModeBanner: false,
