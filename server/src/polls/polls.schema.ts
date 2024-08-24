@@ -22,7 +22,7 @@ export class Poll extends Document {
   dislikers: string[];
 
   @Prop({ required: true, default: [] })
-  comments: { userId: string, name: string, content: string }[];
+  comments: { userId: string, name: string, content: string, isLiked: boolean }[];
 
   @Prop()
   createdAt: Date;

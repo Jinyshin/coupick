@@ -24,7 +24,7 @@ export class PollsController {
       isVoted: [...likers, ...dislikers].includes(_id as string),
       isLiked: likers.includes(_id as string),
       isDisliked: dislikers.includes(_id as string),
-      comments: comments.map(({ name, content }) => ({ name, content }))
+      comments: comments.map(({ name, content, isLiked }) => ({ name, content, isLiked }))
     }))
   }
 
@@ -65,7 +65,7 @@ export class PollsController {
       isVoted: [...likers, ...dislikers].includes(_id as string),
       isLiked: likers.includes(_id as string),
       isDisliked: dislikers.includes(_id as string),
-      comments: comments.map(({ name, content }) => ({ name, content }))
+      comments: comments.map(({ name, content, isLiked }) => ({ name, content, isLiked }))
     }
   }
 
