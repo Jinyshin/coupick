@@ -13,7 +13,7 @@ export class PollsService {
   ) {}
 
   auth(token: string) {
-    return this.jwtService.verify(token.substring(7)) as User;
+    return this.jwtService.verify(token?.substring(7)) as User;
   }
 
   async listPolls(userId: string) {
