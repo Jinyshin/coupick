@@ -45,6 +45,30 @@ export class PollsController {
     return await this.pollsService.createPoll(price, content, thumbnail, coupangUrl);
   }
 
+  @Get(':pollId')
+  async getPoll(
+    @Param('pollId') pollId: string,
+    @Headers('Authorization') token?: string,
+  ) {
+    const { _id } = this.pollsService.auth(token);
+    const {
+      likers,
+      dislikers,
+      comments,
+      ...others
+    } = await this.pollsService.getPoll(pollId);
+
+    return {
+      ...others,
+      likes: likers.length,
+      dislikes: dislikers.length,
+      isVoted: [...likers, ...dislikers].includes(_id as string),
+      isLiked: likers.includes(_id as string),
+      isDisliked: dislikers.includes(_id as string),
+      comments: comments.map(({ name, content }) => ({ name, content }))
+    }
+  }
+
   @Post(':pollId/likes')
   async likePoll(
     @Param('pollId') pollId: string,

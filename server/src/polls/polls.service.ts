@@ -24,12 +24,16 @@ export class PollsService {
     }
   }
 
+  async getPoll(pollId: string) {
+    return await this.pollModel.findById(pollId);
+  }
+
   async listPolls(userId: string) {
     return await this.pollModel.aggregate([
       {
         $match: {
-          likers: { $nin: [ userId ] },
-          dislikers: { $nin: [ userId ] }
+          // likers: { $nin: [ userId ] },
+          // dislikers: { $nin: [ userId ] }
         }
       },
       {
