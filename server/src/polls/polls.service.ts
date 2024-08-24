@@ -17,11 +17,6 @@ export class PollsService {
   }
 
   async listPolls(userId: string) {
-    // return await this.pollModel.find({
-    //   likers: { $nin: [ userId ] },
-    //   dislikers: { $nin: [ userId ] }
-    // });
-
     return await this.pollModel.aggregate([
       {
         $match: {
@@ -53,6 +48,33 @@ export class PollsService {
     });
 
     return poll;
+  }
+
+  async likePoll(
+    pollId: string,
+    userId: string,
+    name: string,
+    like: boolean,
+    comment?: string
+  ) {
+    const updateQuery = { '$push': {} };
+    if (like) {
+      updateQuery['$push']['likers'] = userId;
+    } else {
+      updateQuery['$push']['dislikers'] = userId;
+    }
+    if (!!comment) {
+      updateQuery['$push']['comments'] = {
+        userId,
+        name,
+        content: comment
+      };
+    }
+
+    await this.pollModel.updateOne(
+      { _id: pollId },
+      updateQuery
+    );
   }
 
   async deletePollAll() {

@@ -1,4 +1,4 @@
-import { Controller, Delete, Get, Headers, Param, Post } from '@nestjs/common';
+import { BadRequestException, Body, Controller, Delete, Get, Headers, Param, Post } from '@nestjs/common';
 import { PollsService } from './polls.service';
 
 @Controller('polls')
@@ -29,10 +29,38 @@ export class PollsController {
   }
 
   @Post()
-  async createPoll() {}
+  async createPoll(
+    @Headers('Authorization') token?: string,
+    @Body('price') price?: number,
+    @Body('content') content?: string,
+    @Body('thumbnail') thumbnail?: string,
+    @Body('coupangUrl') coupangUrl?: string
+  ) {
+    const { _id } = this.pollsService.auth(token);
+
+    if (!price || !content || !thumbnail || !coupangUrl) {
+      throw new BadRequestException();
+    }
+
+    return await this.pollsService.createPoll(price, content, thumbnail, coupangUrl);
+  }
 
   @Post(':pollId/likes')
-  async likePoll(@Param('pollId') pollId: string) {}
+  async likePoll(
+    @Param('pollId') pollId: string,
+    @Headers('Authorization') token?: string,
+    @Body('like') like?: boolean,
+    @Body('comment') comment?: string
+  ) {
+    const { _id, name } = this.pollsService.auth(token);
+
+    if (like === null || like === undefined) {
+      throw new BadRequestException();
+    }
+
+    await this.pollsService.likePoll(pollId, _id as string, name, like, comment);
+    return { status: 'success' };
+  }
 
   @Delete()
   async deletePollAll() {
