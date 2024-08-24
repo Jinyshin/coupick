@@ -25,6 +25,6 @@ export class UsersController {
   @Post('dummy')
   async dummy() {
     const indices = [...Array(10).keys()];
-    return Promise.all(indices.map((i) => this.createUser(`user-${i}`)))
+    return Promise.all(indices.map((i) => this.usersService.createUser(`user-${i}`)))
   }
 }
