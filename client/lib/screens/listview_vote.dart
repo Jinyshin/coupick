@@ -1,13 +1,12 @@
 import 'package:client/common/const/app_colors.dart';
 import 'package:client/screens/poll_detail_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart'; // Provider import
 import './widgets/pink_container.dart';
 import '../models/polls.dart';
-
-import 'package:client/services/getpolls_service.dart'; // Import the GetPollsService
 import 'package:client/utilities/logout.dart';
 import './wishlist_screen.dart';
-import '../providers/listview_product_provider.dart';
+import '../providers/pollsprovider.dart'; // PollsProvider import
 import './widgets/add_post.dart';
 
 class ListViewVote extends StatefulWidget {
@@ -18,14 +17,16 @@ class ListViewVote extends StatefulWidget {
 }
 
 class _ListViewVoteState extends State<ListViewVote> {
-  late Future<List<Poll>> futurePolls;
   late ScrollController _scrollController;
 
   @override
   void initState() {
     super.initState();
-    futurePolls = GetPollsService().getPolls(); // Fetch polls from the API
     _scrollController = ScrollController();
+
+    // Fetch polls when the widget is initialized
+    final pollsProvider = Provider.of<PollsProvider>(context, listen: false);
+    pollsProvider.fetchPolls(); // Fetch polls using the provider
   }
 
   @override
@@ -54,18 +55,18 @@ class _ListViewVoteState extends State<ListViewVote> {
           ),
         ],
       ),
-      body: FutureBuilder<List<Poll>>(
-        future: futurePolls,
-        builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting) {
+      body: Consumer<PollsProvider>(
+        builder: (context, pollsProvider, child) {
+          if (pollsProvider.isLoading) {
             return const Center(child: CircularProgressIndicator());
-          } else if (snapshot.hasError) {
-            return Center(child: Text('Error: ${snapshot.error}'));
-          } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
+          } else if (pollsProvider.hasError) {
+            return Center(child: Text('Error: ${pollsProvider.errorMessage}'));
+          } else if (pollsProvider.polls.isEmpty) {
             return const Center(child: Text('No polls available'));
           } else {
-            final products = snapshot.data!;
+            final products = pollsProvider.polls;
             return ListView.builder(
+              controller: _scrollController,
               itemCount: products.length,
               itemBuilder: (context, index) {
                 final poll = products[index];
