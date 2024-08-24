@@ -1,74 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../providers/wishlist_product_provider.dart';
+import '../services/postpoll_service.dart';
+import './widgets/custom_text_input_field.dart';
 
-// Assuming you have already defined CustomTextInputField widget earlier
-class CustomTextInputField extends StatefulWidget {
-  final int? maxInputCharacters;
-  final String hintString;
-
-  CustomTextInputField({
-    this.maxInputCharacters,
-    required this.hintString,
-  });
-
-  @override
-  _CustomTextInputFieldState createState() => _CustomTextInputFieldState();
-}
-
-class _CustomTextInputFieldState extends State<CustomTextInputField> {
-  late TextEditingController _controller;
-  int _currentCharacterCount = 0;
-
-  @override
-  void initState() {
-    super.initState();
-    _controller = TextEditingController();
-    _controller.addListener(() {
-      setState(() {
-        _currentCharacterCount = _controller.text.length;
-      });
-    });
-  }
-
-  @override
-  void dispose() {
-    _controller.dispose();
-    super.dispose();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        TextField(
-          controller: _controller,
-          maxLength: widget.maxInputCharacters,
-          decoration: InputDecoration(
-            hintText: widget.hintString,
-            border: OutlineInputBorder(),
-            counterText: '', // Hide the default counter text
-          ),
-        ),
-        if (widget.maxInputCharacters != null)
-          Align(
-            alignment: Alignment.centerRight,
-            child: Padding(
-              padding: const EdgeInsets.only(top: 4.0),
-              child: Text(
-                '${_currentCharacterCount}/${widget.maxInputCharacters}',
-                style: TextStyle(color: Colors.grey),
-              ),
-            ),
-          ),
-      ],
-    );
-  }
-}
-
-class PostCreationScreen extends StatelessWidget {
+class PostCreationScreen extends StatefulWidget {
   const PostCreationScreen({super.key});
+
+  @override
+  _PostCreationScreenState createState() => _PostCreationScreenState();
+}
+
+class _PostCreationScreenState extends State<PostCreationScreen> {
+  final TextEditingController _contentController = TextEditingController();
+  final PostPollService _postPollService = PostPollService(); // Create an instance of the service
 
   @override
   Widget build(BuildContext context) {
@@ -128,7 +73,7 @@ class PostCreationScreen extends StatelessWidget {
                       ),
                       const SizedBox(height: 5),
                       Text(
-                        selectedProduct.price,
+                        selectedProduct.price.toString() + '원',
                         style: const TextStyle(
                           color: Colors.red,
                           fontSize: 22,
@@ -137,8 +82,8 @@ class PostCreationScreen extends StatelessWidget {
                       ),
                       const SizedBox(height: 5),
                       if (selectedProduct.isRocketShipping)
-                        Row(
-                          children: const [
+                        const Row(
+                          children: [
                             Icon(Icons.rocket_launch, size: 20, color: Colors.blue),
                             SizedBox(width: 4),
                             Text(
@@ -159,6 +104,19 @@ class PostCreationScreen extends StatelessWidget {
             CustomTextInputField(
               maxInputCharacters: 30,
               hintString: 'Tell us about this item :)',
+              controller: _contentController, // Added controller
+            ),
+            const SizedBox(height: 20),
+            ElevatedButton(
+              onPressed: () => _postPollService.postPoll(
+                name: selectedProduct.name,
+                price: selectedProduct.price,
+                thumbnail: selectedProduct.imageUrl,
+                content: _contentController.text,
+                coupangUrl: selectedProduct.coupangUrl,
+                context: context,
+              ),
+              child: const Text('Confirm'),
             ),
           ],
         ),
