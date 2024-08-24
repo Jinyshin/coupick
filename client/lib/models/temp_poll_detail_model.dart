@@ -30,8 +30,8 @@ List<PollDetailModel> polls = [
     price: '₩ 18,000',
     city: 'Seoul',
     reactions: [
-      Reaction(isLike: true, reactstatement: 'Really love this style!'),
-      Reaction(isLike: false, reactstatement: 'Not my type.'),
+      Reaction(isLike: true, reactionStatement: 'Really love this style!'),
+      Reaction(isLike: false, reactionStatement: 'Not my type.'),
     ],
   ),
   PollDetailModel(
@@ -39,8 +39,8 @@ List<PollDetailModel> polls = [
     price: '₩ 25,000',
     city: 'Busan',
     reactions: [
-      Reaction(isLike: true, reactstatement: 'Fits perfectly!'),
-      Reaction(isLike: true, reactstatement: 'Great material.'),
+      Reaction(isLike: true, reactionStatement: 'Fits perfectly!'),
+      Reaction(isLike: true, reactionStatement: 'Great material.'),
     ],
   ),
   PollDetailModel(
@@ -48,8 +48,8 @@ List<PollDetailModel> polls = [
     price: '₩ 150,000',
     city: 'Incheon',
     reactions: [
-      Reaction(isLike: false, reactstatement: 'Too expensive for me.'),
-      Reaction(isLike: true, reactstatement: 'Looks really elegant.'),
+      Reaction(isLike: false, reactionStatement: 'Too expensive for me.'),
+      Reaction(isLike: true, reactionStatement: 'Looks really elegant.'),
     ],
   ),
   PollDetailModel(
@@ -57,8 +57,8 @@ List<PollDetailModel> polls = [
     price: '₩ 70,000',
     city: 'Daegu',
     reactions: [
-      Reaction(isLike: true, reactstatement: 'Very comfortable!'),
-      Reaction(isLike: false, reactstatement: 'Not a fan of the color.'),
+      Reaction(isLike: true, reactionStatement: 'Very comfortable!'),
+      Reaction(isLike: false, reactionStatement: 'Not a fan of the color.'),
     ],
   ),
   PollDetailModel(
@@ -66,8 +66,8 @@ List<PollDetailModel> polls = [
     price: '₩ 120,000',
     city: 'Jeju',
     reactions: [
-      Reaction(isLike: true, reactstatement: 'Perfect for the winter!'),
-      Reaction(isLike: false, reactstatement: 'Feels a bit heavy.'),
+      Reaction(isLike: true, reactionStatement: 'Perfect for the winter!'),
+      Reaction(isLike: false, reactionStatement: 'Feels a bit heavy.'),
     ],
   ),
 ];
