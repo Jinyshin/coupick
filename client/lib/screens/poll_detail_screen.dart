@@ -162,7 +162,6 @@ class _ReactionSectionState extends State<_ReactionSection> {
 
   void _onSwipe(bool liked) {
     if (liked) {
-      // 사용자가 '좋아요'로 스와이프한 경우
       Navigator.push(
         context,
         MaterialPageRoute(builder: (context) => const LikeReactionScreen()),
