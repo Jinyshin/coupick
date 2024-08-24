@@ -16,11 +16,11 @@ class PollDetailModel {
 
 class Reaction {
   bool isLike;
-  String reactstatement;
+  String reactionStatement;
 
   Reaction({
     required this.isLike,
-    required this.reactstatement,
+    required this.reactionStatement,
   });
 }
 
