@@ -1,4 +1,4 @@
-import { Controller, Get, Headers, Param, Post } from '@nestjs/common';
+import { Controller, Delete, Get, Headers, Param, Post } from '@nestjs/common';
 import { PollsService } from './polls.service';
 
 @Controller('polls')
@@ -33,4 +33,10 @@ export class PollsController {
 
   @Post(':pollId/likes')
   async likePoll(@Param('pollId') pollId: string) {}
+
+  @Delete()
+  async deletePollAll() {
+    await this.pollsService.deletePollAll();
+    return { status: 'success' };
+  }
 }

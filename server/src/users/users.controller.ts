@@ -1,4 +1,4 @@
-import { BadRequestException, Body, Controller, Post } from '@nestjs/common';
+import { BadRequestException, Body, Controller, Delete, Post } from '@nestjs/common';
 import { UsersService } from './users.service';
 
 @Controller('users')
@@ -14,5 +14,11 @@ export class UsersController {
     const token = await this.usersService.createUser(name);
 
     return { accessToken: token };
+  }
+
+  @Delete()
+  async deleteUserAll() {
+    await this.usersService.deleteUserAll();
+    return { status: 'success' };
   }
 }

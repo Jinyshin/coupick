@@ -21,4 +21,8 @@ export class UsersService {
       updatedAt: updatedAt.toISOString()
     });
   }
+
+  async deleteUserAll() {
+    return await this.userModel.deleteMany({});
+  }
 }

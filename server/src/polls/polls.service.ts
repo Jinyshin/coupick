@@ -34,4 +34,8 @@ export class PollsService {
       }
     ]) as Poll[];
   }
+
+  async deletePollAll() {
+    await this.pollModel.deleteMany({});
+  }
 }
