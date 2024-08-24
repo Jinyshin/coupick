@@ -13,7 +13,7 @@ export class PollsController {
   async listPolls(@Headers('Authorization') authorization?: string) {
     const { userId } = this.jwtService.verify(authorization);
     return userId;
-    // const polls = await this.pollsService.listPolls('');
+    const polls = await this.pollsService.listPolls('');
   }
 
   @Post()

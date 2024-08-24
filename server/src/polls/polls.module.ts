@@ -3,6 +3,7 @@ import { PollsService } from './polls.service';
 import { PollsController } from './polls.controller';
 import { MongooseModule } from '@nestjs/mongoose';
 import { Poll, PollSchema } from './polls.schema';
+import { JwtService } from '@nestjs/jwt';
 
 @Module({
   imports: [
@@ -10,7 +11,7 @@ import { Poll, PollSchema } from './polls.schema';
       { name: Poll.name, schema: PollSchema }
     ])
   ],
-  providers: [PollsService],
+  providers: [PollsService, JwtService],
   controllers: [PollsController]
 })
 export class PollsModule {}
