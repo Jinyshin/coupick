@@ -18,7 +18,7 @@ class ListViewVote extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Product List'),
+        title: const Text('Coupick List'),
         actions: [
           IconButton(
             icon: const Icon(Icons.notifications),
