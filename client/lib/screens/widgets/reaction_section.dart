@@ -85,8 +85,12 @@ class _ReactionSectionState extends State<ReactionSection> {
                       itemBuilder: (context, index) {
                         final comment = widget.comments[index];
                         return ListTile(
-                          leading: const Icon(Icons.thumb_down,
-                              color: AppColors.yellowLogoColor),
+                          leading:  Icon(
+                            comment.isLiked ? Icons.thumb_up : Icons.thumb_down,
+                            color: comment.isLiked
+                                ? AppColors.lightblueLogoColor
+                                : AppColors.yellowLogoColor,
+                          ),
                           title: Text('${comment.name}: ${comment.content}'),
                         );
                       },
@@ -120,7 +124,12 @@ class _ReactionSectionState extends State<ReactionSection> {
         if (widget.comments.isNotEmpty)
           Row(
             children: [
-              const Icon(Icons.thumb_down, color: AppColors.yellowLogoColor),
+              Icon(
+                widget.comments[0].isLiked ? Icons.thumb_up : Icons.thumb_down,
+                color: widget.comments[0].isLiked
+                    ? AppColors.lightblueLogoColor
+                    : AppColors.yellowLogoColor,
+              ),
               const SizedBox(width: 8),
               Expanded(
                 child: Text(

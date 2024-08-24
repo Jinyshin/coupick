@@ -37,21 +37,22 @@ class Poll {
         content: json['content'] as String,
         thumbnail: json['thumbnail'] as String,
         coupangUrl: json['coupangUrl'] as String,
-        likes: json['likes'] as int,
-        dislikes: json['dislikes'] as int,
-        isVoted: json['isVoted'] as bool ?? false,
-        isLiked: json['isLiked'] as bool ?? false,
-        isDisliked: json['isDisliked'] as bool ?? false,
+        likes: json['likes'] as int? ?? 0,
+        dislikes: json['dislikes'] as int? ?? 0,
+        isVoted: json['isVoted'] as bool? ?? false,
+        isLiked: json['isLiked'] as bool? ?? false,
+        isDisliked: json['isDisliked'] as bool? ?? false,
         comments: (json['comments'] as List<dynamic>)
             .map((item) => Comment.fromJson(item as Map<String, dynamic>))
             .toList(),
         createdAt: DateTime.parse(json['createdAt'] as String),
         updatedAt: DateTime.parse(json['updatedAt'] as String),
       );
-    } catch (e) {
+    } catch (e, stackTrace) {
       print('Failed to parse poll data: $e');
       print('JSON data: $json');
-      throw Exception('Failed to parse poll data');
+      print('Stack trace: $stackTrace');
+      throw Exception('Failed to parse poll data: $e');
     }
   }
 }
@@ -59,16 +60,19 @@ class Poll {
 class Comment {
   final String name;
   final String content;
+  final bool isLiked; // 추가된 필드
 
   Comment({
     required this.name,
     required this.content,
+    required this.isLiked, // 필수 필드로 추가
   });
 
   factory Comment.fromJson(Map<String, dynamic> json) {
     return Comment(
       name: json['name'] as String,
       content: json['content'] as String,
+      isLiked: json['isLiked'] as bool? ?? false, // JSON 데이터에서 필드 읽기
     );
   }
 }
