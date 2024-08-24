@@ -9,10 +9,23 @@ export class PollsController {
 
   @Get()
   async listPolls(@Headers('Authorization') token?: string) {
-    // const { userId } = this.jwtService.verify(authorization);
-    // return userId;
-    return this.pollsService.auth(token);
-    const polls = await this.pollsService.listPolls('');
+    const { _id } = this.pollsService.auth(token);
+    const polls = await this.pollsService.listPolls(_id as string);
+
+    return polls.map(({
+      likers,
+      dislikers,
+      comments,
+      ...others
+    }) => ({
+      ...others,
+      likes: likers.length,
+      dislikes: dislikers.length,
+      isVoted: [...likers, ...dislikers].includes(_id as string),
+      isLiked: likers.includes(_id as string),
+      isDisliked: dislikers.includes(_id as string),
+      comments: comments.map(({ name, content }) => ({ name, content }))
+    }))
   }
 
   @Post()
