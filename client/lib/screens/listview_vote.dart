@@ -1,21 +1,29 @@
 import 'package:flutter/material.dart';
 import './widgets/pink_container.dart';
 import '../models/polls.dart';
+import 'package:client/services/getpolls_service.dart'; // Import the GetPollsService
 
 import 'package:client/utilities/logout.dart';
-
 import './wishlist_screen.dart'; // Import the WishlistScreen
-import '../providers/listview_product_provider.dart'; // Import the product provider
 
-
-class ListViewVote extends StatelessWidget {
+class ListViewVote extends StatefulWidget {
   const ListViewVote({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    // Use the getProducts function to get the list of Poll objects
-    final List<Poll> products = getProducts();
+  _ListViewVoteState createState() => _ListViewVoteState();
+}
 
+class _ListViewVoteState extends State<ListViewVote> {
+  late Future<List<Poll>> futurePolls;
+
+  @override
+  void initState() {
+    super.initState();
+    futurePolls = GetPollsService().getPolls(); // Fetch polls from the API
+  }
+
+  @override
+  Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Coupick List'),
@@ -34,21 +42,35 @@ class ListViewVote extends StatelessWidget {
           ),
         ],
       ),
-      body: ListView.builder(
-        itemCount: products.length,
-        itemBuilder: (context, index) {
-          final poll = products[index];
-          return Column(
-            children: [
-              PinkContainer(poll: poll),
-              const Padding(
-                padding: EdgeInsets.symmetric(horizontal: 16.0), // 왼쪽, 오른쪽에 16의 패딩 추가
-                child: Divider(
-                  thickness: 1, // 두께를 1로 설정
-                ),
-              ),  // Divider 추가
-            ],
-          );
+      body: FutureBuilder<List<Poll>>(
+        future: futurePolls,
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return const Center(child: CircularProgressIndicator());
+          } else if (snapshot.hasError) {
+            return Center(child: Text('Error: ${snapshot.error}'));
+          } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
+            return const Center(child: Text('No polls available'));
+          } else {
+            final products = snapshot.data!;
+            return ListView.builder(
+              itemCount: products.length,
+              itemBuilder: (context, index) {
+                final poll = products[index];
+                return Column(
+                  children: [
+                    PinkContainer(poll: poll),
+                    const Padding(
+                      padding: EdgeInsets.symmetric(horizontal: 16.0), // 왼쪽, 오른쪽에 16의 패딩 추가
+                      child: Divider(
+                        thickness: 1, // 두께를 1로 설정
+                      ),
+                    ), // Divider 추가
+                  ],
+                );
+              },
+            );
+          }
         },
       ),
       floatingActionButton: FloatingActionButton(
