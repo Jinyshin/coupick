@@ -1,3 +1,5 @@
+// import your app colors
+import 'package:client/common/const/app_colors.dart';
 import 'package:flutter/material.dart';
 
 class ProgressBar extends StatelessWidget {
@@ -14,33 +16,48 @@ class ProgressBar extends StatelessWidget {
   Widget build(BuildContext context) {
     int totalVotes = likes + dislikes;
     double dislikePercentage = totalVotes > 0 ? dislikes / totalVotes : 0.0;
+    double likePercentage = totalVotes > 0 ? likes / totalVotes : 0.0;
 
     return Column(
       children: [
         Row(
           children: [
-            const Icon(
+            Icon(
               Icons.thumb_down,
-              color: Colors.red,
+              color: dislikePercentage > 0.5
+                  ? AppColors.yellowLogoColor
+                  : AppColors.yellowLogoColor.withOpacity(0.2), // 흐리게
             ),
-            SizedBox(width: 8,),
+            const SizedBox(width: 8),
             Expanded(
               child: SizedBox(
                 height: 12.0,
                 child: ClipRRect(
                   borderRadius: BorderRadius.circular(6.0),
-                  child: LinearProgressIndicator(
+                  child: dislikePercentage > 0.5
+                      ? LinearProgressIndicator(
                     value: dislikePercentage,
-                    backgroundColor: Colors.green.withOpacity(0.5),
-                    valueColor: AlwaysStoppedAnimation<Color>(Colors.red),
+                    backgroundColor: AppColors.lightblueLogoColor.withOpacity(0.2),
+                    valueColor: const AlwaysStoppedAnimation<Color>(AppColors.yellowLogoColor),
+                  )
+                      : Transform(
+                    alignment: Alignment.center,
+                    transform: Matrix4.identity()..scale(-1.0, 1.0),
+                    child: LinearProgressIndicator(
+                      value: likePercentage,
+                      backgroundColor: AppColors.yellowLogoColor.withOpacity(0.2),
+                      valueColor: const AlwaysStoppedAnimation<Color>(AppColors.lightblueLogoColor),
+                    ),
                   ),
                 ),
               ),
             ),
-            SizedBox(width: 8,),
-            const Icon(
+            const SizedBox(width: 8),
+            Icon(
               Icons.thumb_up,
-              color: Colors.green,
+              color: likePercentage > 0.5
+                  ? AppColors.lightblueLogoColor
+                  : AppColors.lightblueLogoColor.withOpacity(0.2), // 흐리게
             ),
           ],
         ),

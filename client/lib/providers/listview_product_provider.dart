@@ -160,7 +160,7 @@ List<Poll> getProducts() {
       content: pollContents[getRandomInt(0, pollContents.length)], // Random content from the list
       thumbnail: thumbnailUrls[i],
       coupangUrl: coupangUrls[i],
-      likes: getRandomInt(50, 500), // Random likes between 50 and 500
+      likes: getRandomInt(10, 100), // Random likes between 50 and 500
       dislikes: getRandomInt(10, 100), // Random dislikes between 10 and 100
       isVoted: false,
       isLiked: false,
