@@ -46,8 +46,8 @@ class MyApp extends StatelessWidget {
                 // ? const PollDetailScreen(
                 //     pollId: 'he',
                 //   )
-                ? const Example()
-                // ? const ListViewVote()
+                // ? const Example()
+                ? const ListViewVote()
                 : const UsernameCreationScreen(),
             routes: {
               '/vote': (context) => const ListViewVote(),
