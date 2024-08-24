@@ -2,12 +2,13 @@ import { Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { Poll } from './polls.schema';
 import { Model } from 'mongoose';
+import { InjectModel } from '@nestjs/mongoose';
 
 @Injectable()
 export class PollsService {
   constructor(
     private readonly jwtService: JwtService,
-    private pollModel: Model<Poll>
+    @InjectModel(Poll.name) private pollModel: Model<Poll>
   ) {}
 
   auth(token: string) {
