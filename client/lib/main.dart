@@ -24,7 +24,8 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
-      home: const ListViewVote(), // 여기서 ListViewVote 화면을 표시하도록 설정
+      debugShowCheckedModeBanner: false, // Hide the debug ribbon
+      home: const ListViewVote(), // Set ListViewVote as the initial screen
     );
   }
 }
