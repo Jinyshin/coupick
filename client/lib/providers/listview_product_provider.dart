@@ -156,7 +156,7 @@ List<Poll> getProducts() {
   for (int i = 0; i < thumbnailUrls.length; i++) {
     final poll = Poll(
       id: (i + 1).toString(),
-      price: '${getRandomInt(1000, 100000)}',
+      price: getRandomInt(1000, 100000).toDouble(),
       content: pollContents[getRandomInt(0, pollContents.length)], // Random content from the list
       thumbnail: thumbnailUrls[i],
       coupangUrl: coupangUrls[i],

@@ -19,12 +19,20 @@ class ListViewVote extends StatefulWidget {
 
 class _ListViewVoteState extends State<ListViewVote> {
   late Future<List<Poll>> futurePolls;
+  late ScrollController _scrollController;
 
 
   @override
   void initState() {
     super.initState();
     futurePolls = GetPollsService().getPolls(); // Fetch polls from the API
+    _scrollController = ScrollController();
+  }
+
+  @override
+  void dispose() {
+    _scrollController.dispose(); // ScrollController 폐기
+    super.dispose();
   }
 
   @override
