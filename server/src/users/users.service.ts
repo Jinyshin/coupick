@@ -6,7 +6,10 @@ import { JwtService } from '@nestjs/jwt';
 
 @Injectable()
 export class UsersService {
-  constructor(private readonly jwtService: JwtService, @InjectModel(User.name) private userModel: Model<User>) {}
+  constructor(
+    private readonly jwtService: JwtService,
+    @InjectModel(User.name) private userModel: Model<User>
+  ) {}
 
   async createUser(name: string) {
     const { _id, createdAt, updatedAt } = await this.userModel.create({ name });

@@ -16,10 +16,10 @@ export class Poll extends Document {
   coupangUrl: string;
 
   @Prop({ required: true, default: [] })
-  likes: string[];
+  likers: string[];
 
   @Prop({ required: true, default: [] })
-  dislikes: string[];
+  dislikers: string[];
 
   @Prop({ required: true, default: [] })
   comments: { userId: string, name: string, content: string }[];
