@@ -87,7 +87,7 @@ export class PollsController {
           (Math.floor(Math.random() * 27) + 3) * 1000,
           contents[i % contents.length],
           thumbnails[i & thumbnails.length],
-          coupangs[i % coupangs.length],
+          'https://www.' + coupangs[i % coupangs.length],
           likers,
           dislikers
         );

@@ -33,7 +33,7 @@ export class PollsService {
         }
       },
       {
-        $sample: { size: 20 }
+        $sample: { size: 60 }
       }
     ]) as Poll[];
   }
