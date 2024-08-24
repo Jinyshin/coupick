@@ -6,12 +6,14 @@ import 'package:client/common/const/app_colors.dart';
 import 'package:client/models/polls.dart';
 
 class ReactionSection extends StatefulWidget {
+  final String pollId;  // pollId 필드 추가
   final int likes;
   final int dislikes;
   final List<Comment> comments;
 
   const ReactionSection({
     super.key,
+    required this.pollId,  // pollId 필수 인자로 추가
     required this.likes,
     required this.dislikes,
     required this.comments,
@@ -28,12 +30,16 @@ class _ReactionSectionState extends State<ReactionSection> {
     if (liked) {
       Navigator.push(
         context,
-        MaterialPageRoute(builder: (context) => const LikeReactionScreen()),
+        MaterialPageRoute(
+          builder: (context) => LikeReactionScreen(pollId: widget.pollId),  // pollId 전달
+        ),
       );
     } else {
       Navigator.push(
         context,
-        MaterialPageRoute(builder: (context) => const DisLikeReactionScreen()),
+        MaterialPageRoute(
+          builder: (context) => DisLikeReactionScreen(pollId: widget.pollId),  // pollId 전달
+        ),
       );
     }
 

@@ -12,27 +12,14 @@ class PollsProvider with ChangeNotifier {
   bool get hasError => _errorMessage != null;
   String? get errorMessage => _errorMessage;
 
-  Poll getPollById(String pollId) {
-    return _polls.firstWhere(
-          (poll) => poll.id == pollId,
-      orElse: () => Poll(
-        id: '',
-        price: 0,
-        content: '',
-        thumbnail: '',
-        coupangUrl: '',
-        likes: 0,
-        dislikes: 0,
-        isVoted: false,
-        isLiked: false,
-        isDisliked: false,
-        comments: [],
-        createdAt: DateTime.now(),
-        updatedAt: DateTime.now(),
-      ),
-    );
+  Poll? getPollById(String pollId) {
+    try {
+      return _polls.firstWhere((poll) => poll.id == pollId);
+    } catch (e) {
+      _errorMessage = 'Poll not found';
+      return null;
+    }
   }
-
 
   Future<void> fetchPolls() async {
     _isLoading = true;
@@ -48,5 +35,31 @@ class PollsProvider with ChangeNotifier {
       _isLoading = false;
       notifyListeners();
     }
+  }
+
+  void updatePollReaction(String pollId, bool like, String? comment) {
+    final poll = _polls.firstWhere((poll) => poll.id == pollId);
+
+    if (like && !poll.isLiked) {
+      poll.likes += 1;
+      poll.isLiked = true;
+      if (poll.isDisliked) {
+        poll.dislikes -= 1;
+        poll.isDisliked = false;
+      }
+    } else if (!like && !poll.isDisliked) {
+      poll.dislikes += 1;
+      poll.isDisliked = true;
+      if (poll.isLiked) {
+        poll.likes -= 1;
+        poll.isLiked = false;
+      }
+    }
+
+    if (comment != null && comment.isNotEmpty) {
+      poll.comments.add(Comment(name: 'You', content: comment));
+    }
+
+    notifyListeners();
   }
 }
