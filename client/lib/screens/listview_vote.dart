@@ -1,8 +1,12 @@
 import 'package:flutter/material.dart';
 import './widgets/pink_container.dart';
 import '../models/polls.dart';
+
+import 'package:client/utilities/logout.dart';
+
 import './wishlist_screen.dart'; // Import the WishlistScreen
 import '../providers/listview_product_provider.dart'; // Import the product provider
+
 
 class ListViewVote extends StatelessWidget {
   const ListViewVote({super.key});
@@ -15,6 +19,20 @@ class ListViewVote extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Product List'),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.notifications),
+            onPressed: () {
+              // 알림 버튼 클릭 시 처리할 로직 (예: 알림 화면으로 이동)
+            },
+          ),
+          IconButton(
+            icon: const Icon(Icons.logout),
+            onPressed: () async {
+              await logout(context);
+            },
+          ),
+        ],
       ),
       body: ListView.builder(
         itemCount: products.length,
