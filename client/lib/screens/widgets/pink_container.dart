@@ -1,30 +1,19 @@
 import 'package:flutter/material.dart';
 import 'progressbar.dart';
 import 'package:client/utilities/calculate_vote.dart';
+import 'package:client/models/polls.dart';
 
 class PinkContainer extends StatelessWidget {
-  final String imageUrl;
-  final String topic;
-  final String price;
-  final int likes;
-  final int dislikes;
-  final String participants;
-  final String time;
+  final Poll poll;
 
   const PinkContainer({
     super.key,
-    required this.imageUrl,
-    required this.topic,
-    required this.price,
-    required this.likes,
-    required this.dislikes,
-    required this.participants,
-    required this.time,
+    required this.poll,
   });
 
   @override
   Widget build(BuildContext context) {
-    int votePercentage = calculateVotePercentage(likes, dislikes);
+    int votePercentage = calculateVotePercentage(poll.likes, poll.dislikes);
 
     return Padding(
       padding: const EdgeInsets.all(8.0),
@@ -53,7 +42,7 @@ class PinkContainer extends StatelessWidget {
                       child: ClipRRect(
                         borderRadius: BorderRadius.circular(12),
                         child: Image.network(
-                          imageUrl,
+                          poll.thumbnail,
                           fit: BoxFit.cover,
                           errorBuilder: (context, error, stackTrace) {
                             return const Icon(
@@ -66,7 +55,7 @@ class PinkContainer extends StatelessWidget {
                     ),
                     const SizedBox(height: 8),
                     Text(
-                      price,
+                      poll.price,
                       style: const TextStyle(
                         fontSize: 16,
                         fontWeight: FontWeight.bold,
@@ -81,16 +70,28 @@ class PinkContainer extends StatelessWidget {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(
-                        time,
-                        style: const TextStyle(
-                          fontSize: 14,
-                          color: Colors.black54,
-                        ),
+                      Row(
+                        children: [
+                          const Text(
+                            '투표 마감까지',
+                            style: TextStyle(
+                              fontSize: 14,
+                              color: Colors.black54,
+                            ),
+                          ),
+                          const SizedBox(width: 5),
+                          Text(
+                            poll.timeLeft,
+                            style: const TextStyle(
+                              fontSize: 14,
+                              color: Colors.pink,
+                            ),
+                          ),
+                        ],
                       ),
                       const SizedBox(height: 8),
                       Text(
-                        topic,
+                        poll.content,
                         style: const TextStyle(
                           fontSize: 18,
                           fontWeight: FontWeight.bold,
@@ -103,7 +104,7 @@ class PinkContainer extends StatelessWidget {
               ],
             ),
             const SizedBox(height: 16),
-            ProgressBar(likes: likes, dislikes: dislikes), // ProgressBar 위젯 사용
+            ProgressBar(likes: poll.likes, dislikes: poll.dislikes), // ProgressBar 위젯 사용
           ],
         ),
       ),

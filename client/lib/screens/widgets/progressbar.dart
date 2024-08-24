@@ -13,7 +13,7 @@ class ProgressBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     int totalVotes = likes + dislikes;
-    double likePercentage = totalVotes > 0 ? likes / totalVotes : 0.0;
+    double dislikePercentage = totalVotes > 0 ? dislikes / totalVotes : 0.0;
 
     return Column(
       children: [
@@ -23,13 +23,21 @@ class ProgressBar extends StatelessWidget {
               Icons.thumb_down,
               color: Colors.red,
             ),
+            SizedBox(width: 8,),
             Expanded(
-              child: LinearProgressIndicator(
-                value: likePercentage,
-                backgroundColor: Colors.red.withOpacity(0.5),
-                valueColor: AlwaysStoppedAnimation<Color>(Colors.green),
+              child: SizedBox(
+                height: 12.0,
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(6.0),
+                  child: LinearProgressIndicator(
+                    value: dislikePercentage,
+                    backgroundColor: Colors.green.withOpacity(0.5),
+                    valueColor: AlwaysStoppedAnimation<Color>(Colors.red),
+                  ),
+                ),
               ),
             ),
+            SizedBox(width: 8,),
             const Icon(
               Icons.thumb_up,
               color: Colors.green,
