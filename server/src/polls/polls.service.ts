@@ -63,7 +63,7 @@ export class PollsService {
     } else {
       updateQuery['$push']['dislikers'] = userId;
     }
-    if (!comment) {
+    if (!!comment) {
       updateQuery['$push']['comments'] = {
         userId,
         name,
