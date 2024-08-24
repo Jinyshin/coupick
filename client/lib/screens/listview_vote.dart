@@ -1,20 +1,17 @@
 import 'package:flutter/material.dart';
 import './widgets/pink_container.dart';
 import '../models/polls.dart';
-
-import 'package:client/utilities/logout.dart';
-
-import './wishlist_screen.dart'; // Import the WishlistScreen
-import '../providers/listview_product_provider.dart'; // Import the product provider
-
+import '../utilities/logout.dart';
+import '../providers/listview_product_provider.dart';
+import './widgets/add_post.dart';
 
 class ListViewVote extends StatelessWidget {
   const ListViewVote({super.key});
 
   @override
   Widget build(BuildContext context) {
-    // Use the getProducts function to get the list of Poll objects
     final List<Poll> products = getProducts();
+    final ScrollController _scrollController = ScrollController();
 
     return Scaffold(
       appBar: AppBar(
@@ -23,7 +20,7 @@ class ListViewVote extends StatelessWidget {
           IconButton(
             icon: const Icon(Icons.notifications),
             onPressed: () {
-              // 알림 버튼 클릭 시 처리할 로직 (예: 알림 화면으로 이동)
+              // Handle notification button click (e.g., navigate to notifications screen)
             },
           ),
           IconButton(
@@ -35,6 +32,7 @@ class ListViewVote extends StatelessWidget {
         ],
       ),
       body: ListView.builder(
+        controller: _scrollController,
         itemCount: products.length,
         itemBuilder: (context, index) {
           final poll = products[index];
@@ -42,28 +40,16 @@ class ListViewVote extends StatelessWidget {
             children: [
               PinkContainer(poll: poll),
               const Padding(
-                padding: EdgeInsets.symmetric(horizontal: 16.0), // 왼쪽, 오른쪽에 16의 패딩 추가
+                padding: EdgeInsets.symmetric(horizontal: 16.0), // Add padding to the left and right
                 child: Divider(
-                  thickness: 1, // 두께를 1로 설정
+                  thickness: 1, // Set thickness to 1
                 ),
-              ),  // Divider 추가
+              ), // Add Divider
             ],
           );
         },
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          // Navigate to WishlistScreen when FAB is pressed
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) => const WishlistScreen(),
-            ),
-          );
-        },
-        child: const Icon(Icons.add), // Icon to display on the FAB
-        backgroundColor: Theme.of(context).colorScheme.primary, // Use colorScheme's primary color
-      ),
+      floatingActionButton: AddPostButton(scrollController: _scrollController),
     );
   }
 }
