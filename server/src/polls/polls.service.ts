@@ -10,6 +10,12 @@ export class PollsService {
     private pollModel: Model<Poll>
   ) {}
 
+  auth(token: string) {
+    const { userId } = this.jwtService.verify(token);
+
+    return userId;
+  }
+
   async listPolls(userId: string) {
     return await this.pollModel.find({
       likers: { $nin: [ userId ] },
