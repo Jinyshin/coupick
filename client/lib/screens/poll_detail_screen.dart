@@ -55,12 +55,15 @@ class _ProductInfoSectionState extends State<_ProductInfoSection> {
       children: [
         const Flexible(
           flex: 1,
-          child: Text(
-            'What do you think of this ROKA T-shirt? I want to be a cool girl',
-            style: TextStyle(
-              color: Colors.black,
-              fontWeight: FontWeight.bold,
-              fontSize: 20,
+          child: Padding(
+            padding: EdgeInsets.only(bottom: 8.0),
+            child: Text(
+              'What do you think of this ROKA T-shirt? I want to be a cool girl',
+              style: TextStyle(
+                color: Colors.black,
+                fontWeight: FontWeight.bold,
+                fontSize: 20,
+              ),
             ),
           ),
         ),
@@ -283,7 +286,7 @@ class _ReactionSectionState extends State<_ReactionSection> {
                   ),
                   child: IconButton(
                     icon: const Icon(Icons.thumb_down,
-                        color: Colors.yellow, size: 48),
+                        color: Colors.white, size: 48),
                     onPressed: () => _onSwipe(false),
                     padding: EdgeInsets.zero,
                   ),
@@ -312,7 +315,7 @@ class _ReactionSectionState extends State<_ReactionSection> {
                   ),
                   child: IconButton(
                     icon: const Icon(Icons.thumb_up,
-                        color: Colors.yellow, size: 48),
+                        color: Colors.white, size: 48),
                     onPressed: () => _onSwipe(true),
                     padding: EdgeInsets.zero,
                   ),
