@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'providers/wishlist_product_provider.dart';
 import 'screens/wishlist_screen.dart';
+import 'screens/listview_vote.dart';
 
 void main() {
   runApp(
@@ -20,9 +21,10 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Coupick App',
       theme: ThemeData(
-        primarySwatch: Colors.blue,
+        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
+        useMaterial3: true,
       ),
-      home: const WishlistScreen(),
+      home: const ListViewVote(), // 여기서 ListViewVote 화면을 표시하도록 설정
     );
   }
 }
