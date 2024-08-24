@@ -75,14 +75,20 @@ class DisLikeReactionScreen extends StatelessWidget {
                     text: 'Skip',
                     textColor: AppColors.darkGray,
                     backgroundColor: AppColors.faintGray,
-                    onPressed: () {},
+                    onPressed: () async {
+                      // await sendDislike(); // '싫어요'를 보내는 API 호출
+                      Navigator.pop(context, true);
+                    },
                   ),
                   CustomElevatedButton(
                     width: paddedWidth * 0.47,
                     text: 'Done',
                     textColor: Colors.white,
                     backgroundColor: AppColors.primaryColor,
-                    onPressed: () {},
+                    onPressed: () async {
+                      // await sendDislike(); // '싫어요 + reaction string'을 보내는 API 호출
+                      Navigator.pop(context, true); // 현재 화면을 닫고 true를 반환
+                    },
                   ),
                 ],
               ),

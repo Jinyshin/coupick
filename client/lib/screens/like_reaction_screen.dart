@@ -75,14 +75,20 @@ class LikeReactionScreen extends StatelessWidget {
                     text: 'Skip',
                     textColor: AppColors.darkGray,
                     backgroundColor: AppColors.faintGray,
-                    onPressed: () {},
+                    onPressed: () async {
+                      // await sendLike(); // '좋아요'를 보내는 API 호출
+                      Navigator.pop(context, true);
+                    },
                   ),
                   CustomElevatedButton(
                     width: paddedWidth * 0.47,
                     text: 'Done',
                     textColor: Colors.white,
                     backgroundColor: AppColors.primaryColor,
-                    onPressed: () {},
+                    onPressed: () async {
+                      // await sendLike(); // '좋아요 + reaction string'을 보내는 API 호출
+                      Navigator.pop(context, true);
+                    },
                   ),
                 ],
               ),

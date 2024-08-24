@@ -1,4 +1,6 @@
+import 'package:client/common/const/app_colors.dart';
 import 'package:client/screens/poll_detail_screen.dart';
+import 'package:client/screens/new_poll_detail_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'providers/wishlist_product_provider.dart';
@@ -32,7 +34,8 @@ class MyApp extends StatelessWidget {
           return MaterialApp(
             title: 'Coupick App',
             theme: ThemeData(
-              colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
+              colorScheme:
+                  ColorScheme.fromSeed(seedColor: AppColors.primaryColor),
               useMaterial3: true,
             ),
             debugShowCheckedModeBanner: false,
@@ -40,7 +43,8 @@ class MyApp extends StatelessWidget {
                 // ? const PollDetailScreen(
                 //     pollId: 'he',
                 //   )
-                ? const ListViewVote()
+                ? const Example()
+                // ? const ListViewVote()
                 : const UsernameCreationScreen(),
             routes: {
               '/vote': (context) => const ListViewVote(),
