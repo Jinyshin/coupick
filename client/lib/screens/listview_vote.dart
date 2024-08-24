@@ -1,20 +1,25 @@
 import 'package:flutter/material.dart';
 import './widgets/pink_container.dart';
 import '../models/polls.dart';
-import 'package:client/services/getpolls_service.dart'; // Import the GetPollsService
 
+import 'package:client/services/getpolls_service.dart'; // Import the GetPollsService
 import 'package:client/utilities/logout.dart';
-import './wishlist_screen.dart'; // Import the WishlistScreen
+import './wishlist_screen.dart'; 
+import '../providers/listview_product_provider.dart';
+import './widgets/add_post.dart';
+
 
 class ListViewVote extends StatefulWidget {
   const ListViewVote({super.key});
 
   @override
+
   _ListViewVoteState createState() => _ListViewVoteState();
 }
 
 class _ListViewVoteState extends State<ListViewVote> {
   late Future<List<Poll>> futurePolls;
+
 
   @override
   void initState() {
@@ -31,7 +36,7 @@ class _ListViewVoteState extends State<ListViewVote> {
           IconButton(
             icon: const Icon(Icons.notifications),
             onPressed: () {
-              // 알림 버튼 클릭 시 처리할 로직 (예: 알림 화면으로 이동)
+              // Handle notification button click (e.g., navigate to notifications screen)
             },
           ),
           IconButton(
@@ -42,6 +47,7 @@ class _ListViewVoteState extends State<ListViewVote> {
           ),
         ],
       ),
+
       body: FutureBuilder<List<Poll>>(
         future: futurePolls,
         builder: (context, snapshot) {
@@ -73,19 +79,7 @@ class _ListViewVoteState extends State<ListViewVote> {
           }
         },
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          // Navigate to WishlistScreen when FAB is pressed
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) => const WishlistScreen(),
-            ),
-          );
-        },
-        child: const Icon(Icons.add), // Icon to display on the FAB
-        backgroundColor: Theme.of(context).colorScheme.primary, // Use colorScheme's primary color
-      ),
+      floatingActionButton: AddPostButton(scrollController: _scrollController),
     );
   }
 }
