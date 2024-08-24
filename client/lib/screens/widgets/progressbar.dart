@@ -25,7 +25,7 @@ class ProgressBar extends StatelessWidget {
               Icons.thumb_down,
               color: dislikePercentage > 0.5
                   ? AppColors.yellowLogoColor
-                  : AppColors.yellowLogoColor.withOpacity(0.2), // 흐리게
+                  : AppColors.extraLightGray, // 흐리게
             ),
             const SizedBox(width: 8),
             Expanded(
@@ -39,7 +39,7 @@ class ProgressBar extends StatelessWidget {
                       child: dislikePercentage > 0.5
                           ? LinearProgressIndicator(
                         value: dislikePercentage,
-                        backgroundColor: AppColors.lightblueLogoColor.withOpacity(0.2),
+                        backgroundColor: AppColors.extraLightGray,
                         valueColor: const AlwaysStoppedAnimation<Color>(AppColors.yellowLogoColor),
                       )
                           : Transform(
@@ -47,7 +47,7 @@ class ProgressBar extends StatelessWidget {
                         transform: Matrix4.identity()..scale(-1.0, 1.0),
                         child: LinearProgressIndicator(
                           value: likePercentage,
-                          backgroundColor: AppColors.yellowLogoColor.withOpacity(0.2),
+                          backgroundColor: AppColors.extraLightGray,
                           valueColor: const AlwaysStoppedAnimation<Color>(AppColors.lightblueLogoColor),
                         ),
                       ),
@@ -87,14 +87,14 @@ class ProgressBar extends StatelessWidget {
               Icons.thumb_up,
               color: likePercentage > 0.5
                   ? AppColors.lightblueLogoColor
-                  : AppColors.lightblueLogoColor.withOpacity(0.2), // 흐리게
+                  : AppColors.extraLightGray, // 흐리게
             ),
           ],
         ),
         const SizedBox(height: 8),
         Text(
           '$totalVotes명의 사람들이 투표 참여중!',
-          style: const TextStyle(fontSize: 14, color: Colors.black54),
+          style: const TextStyle(fontSize: 14, color: AppColors.middleGray),
         ),
       ],
     );
