@@ -12,7 +12,7 @@ export class PollsService {
   ) {}
 
   auth(token: string) {
-    const { userId } = this.jwtService.verify(token);
+    const { userId } = this.jwtService.verify(token.substring(7));
 
     return userId;
   }
