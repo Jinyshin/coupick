@@ -1,3 +1,5 @@
+import 'package:client/common/const/app_colors.dart';
+import 'package:client/screens/poll_detail_screen.dart';
 import 'package:flutter/material.dart';
 import './widgets/pink_container.dart';
 import '../models/polls.dart';
@@ -7,7 +9,6 @@ import 'package:client/utilities/logout.dart';
 import './wishlist_screen.dart'; 
 import '../providers/listview_product_provider.dart';
 import './widgets/add_post.dart';
-
 
 class ListViewVote extends StatefulWidget {
   const ListViewVote({super.key});
@@ -39,7 +40,7 @@ class _ListViewVoteState extends State<ListViewVote> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Coupick List'),
+        title: const Text('coupicks'),
         actions: [
           IconButton(
             icon: const Icon(Icons.notifications),
@@ -55,7 +56,6 @@ class _ListViewVoteState extends State<ListViewVote> {
           ),
         ],
       ),
-
       body: FutureBuilder<List<Poll>>(
         future: futurePolls,
         builder: (context, snapshot) {

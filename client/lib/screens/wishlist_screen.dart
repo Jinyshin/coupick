@@ -13,13 +13,7 @@ class WishlistScreen extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
-        leading: IconButton(
-          icon: const Icon(Icons.chevron_left), // Left chevron button
-          onPressed: () {
-            Navigator.pop(context); // Navigate back to the previous screen
-          },
-        ),
-        title: null, // Removed the header text
+        title: const Text('Select your coupick item:'),
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0), // Added padding around the entire GridView

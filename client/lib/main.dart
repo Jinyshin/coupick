@@ -1,4 +1,4 @@
-import 'package:client/screens/voting_detail_screen.dart';
+import 'package:client/screens/poll_detail_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'providers/wishlist_product_provider.dart';
@@ -36,7 +36,12 @@ class MyApp extends StatelessWidget {
               useMaterial3: true,
             ),
             debugShowCheckedModeBanner: false,
-            home: hasToken ? const ListViewVote() : const UsernameCreationScreen(),
+            home: hasToken
+                ? const PollDetailScreen(
+                    pollId: 'he',
+                  )
+                // ? const ListViewVote()
+                : const UsernameCreationScreen(),
             routes: {
               '/vote': (context) => const ListViewVote(),
               '/create-username': (context) => const UsernameCreationScreen(),
