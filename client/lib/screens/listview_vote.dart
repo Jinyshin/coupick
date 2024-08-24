@@ -1,3 +1,5 @@
+import 'package:client/common/const/app_colors.dart';
+import 'package:client/screens/poll_detail_screen.dart';
 import 'package:flutter/material.dart';
 import './widgets/pink_container.dart';
 import '../models/polls.dart';
@@ -39,7 +41,7 @@ class _ListViewVoteState extends State<ListViewVote> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Coupick List'),
+        title: const Text('coupicks'),
         actions: [
           IconButton(
             icon: const Icon(Icons.notifications),
@@ -75,13 +77,26 @@ class _ListViewVoteState extends State<ListViewVote> {
                   final poll = products[index];
                   return Column(
                     children: [
-                      PinkContainer(poll: poll),
-                      const Padding(
-                        padding: EdgeInsets.symmetric(horizontal: 16.0), // Add padding to the left and right
-                        child: Divider(
-                          thickness: 1, // Set thickness to 1
-                        ),
-                      ), // Add Divider
+                      GestureDetector(
+                      onTap: () {
+                        // PollDetailScreen으로 네비게이트, pollId 전달
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) =>
+                                PollDetailScreen(pollId: poll.id),
+                          ),
+                        );
+                      },
+                      child: PinkContainer(poll: poll),
+                    ),
+                    const Padding(
+                      padding: EdgeInsets.symmetric(
+                          horizontal: 16.0), // 왼쪽, 오른쪽에 16의 패딩 추가
+                      child: Divider(
+                        thickness: 1, // 두께를 1로 설정
+                      ),
+                    ), // Divider 추가
                     ],
                   );
                 },
