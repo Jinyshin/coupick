@@ -54,7 +54,7 @@ export class PollsController {
         const shuffledUserIds = [...userIds];
         shuffledUserIds.sort((a, b) => Math.random() - 0.5);
         const likers = shuffledUserIds.slice(0, likes);
-        const dislikers = shuffledUserIds.slice(likes, dislikes);
+        const dislikers = shuffledUserIds.slice(likes, likes + dislikes);
         return this.pollsService.createPoll(
           (Math.floor(Math.random() * 27) + 3) * 1000,
           contents[i % contents.length],
