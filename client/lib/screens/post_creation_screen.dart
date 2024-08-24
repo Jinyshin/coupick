@@ -2,6 +2,71 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../providers/wishlist_product_provider.dart';
 
+// Assuming you have already defined CustomTextInputField widget earlier
+class CustomTextInputField extends StatefulWidget {
+  final int? maxInputCharacters;
+  final String hintString;
+
+  CustomTextInputField({
+    this.maxInputCharacters,
+    required this.hintString,
+  });
+
+  @override
+  _CustomTextInputFieldState createState() => _CustomTextInputFieldState();
+}
+
+class _CustomTextInputFieldState extends State<CustomTextInputField> {
+  late TextEditingController _controller;
+  int _currentCharacterCount = 0;
+
+  @override
+  void initState() {
+    super.initState();
+    _controller = TextEditingController();
+    _controller.addListener(() {
+      setState(() {
+        _currentCharacterCount = _controller.text.length;
+      });
+    });
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        TextField(
+          controller: _controller,
+          maxLength: widget.maxInputCharacters,
+          decoration: InputDecoration(
+            hintText: widget.hintString,
+            border: OutlineInputBorder(),
+            counterText: '', // Hide the default counter text
+          ),
+        ),
+        if (widget.maxInputCharacters != null)
+          Align(
+            alignment: Alignment.centerRight,
+            child: Padding(
+              padding: const EdgeInsets.only(top: 4.0),
+              child: Text(
+                '${_currentCharacterCount}/${widget.maxInputCharacters}',
+                style: TextStyle(color: Colors.grey),
+              ),
+            ),
+          ),
+      ],
+    );
+  }
+}
+
 class PostCreationScreen extends StatelessWidget {
   const PostCreationScreen({super.key});
 
@@ -38,49 +103,49 @@ class PostCreationScreen extends StatelessWidget {
                     color: Colors.grey[300],
                     child: const Icon(
                       Icons.image,
-                      size: 60, // Increased size for the placeholder icon
+                      size: 60,
                       color: Colors.grey,
                     ),
                   )
                 else
                   Image.network(
                     selectedProduct.imageUrl,
-                    width: 120, // Increased width for larger image display
-                    height: 120, // Increased height for larger image display
+                    width: 120,
+                    height: 120,
                     fit: BoxFit.cover,
                   ),
-                const SizedBox(width: 16), // Increased spacing between image and text
-                Expanded( // To ensure the text does not overflow the screen width
+                const SizedBox(width: 16),
+                Expanded(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
                         selectedProduct.name,
                         style: const TextStyle(
-                          fontSize: 18, // Increased font size for the product name
+                          fontSize: 18,
                           fontWeight: FontWeight.bold,
                         ),
                       ),
-                      const SizedBox(height: 5), // Small space between name and price
+                      const SizedBox(height: 5),
                       Text(
                         selectedProduct.price,
                         style: const TextStyle(
                           color: Colors.red,
-                          fontSize: 22, // Increased font size for the price
+                          fontSize: 22,
                           fontWeight: FontWeight.bold,
                         ),
                       ),
-                      const SizedBox(height: 5), // Small space between price and shipping
+                      const SizedBox(height: 5),
                       if (selectedProduct.isRocketShipping)
                         Row(
                           children: const [
-                            Icon(Icons.rocket_launch, size: 20, color: Colors.blue), // Same rocket icon
+                            Icon(Icons.rocket_launch, size: 20, color: Colors.blue),
                             SizedBox(width: 4),
                             Text(
                               '로켓배송',
                               style: TextStyle(
                                 color: Colors.blue,
-                                fontSize: 16, // Increased font size for the shipping text
+                                fontSize: 16,
                               ),
                             ),
                           ],
@@ -90,22 +155,10 @@ class PostCreationScreen extends StatelessWidget {
                 ),
               ],
             ),
-            const SizedBox(height: 30), // Increased space before the text fields
-            const TextField(
-              decoration: InputDecoration(
-                labelText: 'Title',
-                labelStyle: TextStyle(fontSize: 18), // Increased font size for the label
-                border: OutlineInputBorder(),
-              ),
-            ),
-            const SizedBox(height: 20),
-            const TextField(
-              decoration: InputDecoration(
-                labelText: 'Content',
-                labelStyle: TextStyle(fontSize: 18),
-                border: OutlineInputBorder(),
-              ),
-              maxLines: 5,
+            const SizedBox(height: 30),
+            CustomTextInputField(
+              maxInputCharacters: 30,
+              hintString: 'Tell us about this item :)',
             ),
           ],
         ),

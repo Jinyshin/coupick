@@ -90,8 +90,8 @@ class WishlistScreen extends StatelessWidget {
                                     color: Colors.blue.withOpacity(0.7),
                                     borderRadius: BorderRadius.circular(8),
                                   ),
-                                  child: Row(
-                                    children: const [
+                                  child: const Row(
+                                    children: [
                                       Icon(
                                         Icons.rocket_launch, // Rocket icon
                                         size: 16,
@@ -110,7 +110,7 @@ class WishlistScreen extends StatelessWidget {
                                   ),
                                 ),
                               ),
-                            Positioned(
+                            const Positioned(
                               top: 8,
                               right: 8,
                               child: Icon(
