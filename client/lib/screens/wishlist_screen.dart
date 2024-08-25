@@ -40,10 +40,10 @@ class _WishlistScreenState extends State<WishlistScreen> {
         child: GridView.builder(
           itemCount: productProvider.wishlist.length,
           gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-            crossAxisCount: 2,
-            childAspectRatio: 0.65,
-            crossAxisSpacing: 8,
-            mainAxisSpacing: 8,
+            crossAxisCount: 2, // Two columns per row
+            childAspectRatio: 0.6, // Adjusted aspect ratio
+            crossAxisSpacing: 8, // Spacing between columns
+            mainAxisSpacing: 8, // Spacing between rows
           ),
           itemBuilder: (context, index) {
             final product = productProvider.wishlist[index];

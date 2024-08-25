@@ -1,15 +1,21 @@
 import 'package:client/common/const/app_colors.dart';
+import 'package:client/screens/poll_detail_screen.dart';
+import 'package:client/screens/new_poll_detail_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'providers/wishlist_product_provider.dart';
 import 'providers/shared_preference_service.dart';
+import 'providers/pollsprovider.dart'; // PollsProvider import
 import 'screens/listview_vote.dart';
 import 'screens/signup.dart';
 
 void main() {
   runApp(
-    ChangeNotifierProvider(
-      create: (context) => ProductProvider(),
+    MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (context) => ProductProvider()),
+        ChangeNotifierProvider(create: (context) => PollsProvider()), // PollsProvider 추가
+      ],
       child: const MyApp(),
     ),
   );
@@ -40,6 +46,7 @@ class MyApp extends StatelessWidget {
                 // ? const PollDetailScreen(
                 //     pollId: 'he',
                 //   )
+                // ? const Example()
                 ? const ListViewVote()
                 : const UsernameCreationScreen(),
             routes: {
