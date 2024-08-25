@@ -1,12 +1,12 @@
 import 'dart:math';
-
 import 'package:client/providers/pollsprovider.dart';
 import 'package:client/screens/like_reaction_screen.dart';
 import 'package:client/screens/widgets/poll_detail_card.dart';
 import 'package:flutter_card_swiper/flutter_card_swiper.dart';
 import 'package:flutter/material.dart';
 import 'package:client/screens/dislike_reaction_screen.dart';
-import 'package:provider/provider.dart'; // DisLikeReactionScreen import
+import 'package:provider/provider.dart';
+import 'package:client/services/like_service.dart'; // LikeService import
 
 class NewPollDetailScreen extends StatefulWidget {
   final String pollId;
@@ -22,6 +22,7 @@ class NewPollDetailScreen extends StatefulWidget {
 
 class _ExamplePageState extends State<NewPollDetailScreen> {
   final CardSwiperController controller = CardSwiperController();
+  final LikeService likeService = LikeService(); // LikeService 인스턴스 생성
 
   @override
   void dispose() {
@@ -48,7 +49,6 @@ class _ExamplePageState extends State<NewPollDetailScreen> {
             }
 
             final polls = pollsProvider.polls;
-            // 특정 pollId를 가진 Poll 객체를 찾기
             final pollIndex =
                 polls.indexWhere((poll) => poll.id == widget.pollId);
             if (pollIndex == -1) {
@@ -57,13 +57,11 @@ class _ExamplePageState extends State<NewPollDetailScreen> {
               );
             }
 
-            // 리스트 재정렬: 특정 Poll을 0번 인덱스로, 나머지 섞기
             final mainPoll = polls[pollIndex];
-            polls.removeAt(pollIndex); // 기존 위치에서 제거
-            polls.shuffle(Random()); // 나머지 섞기
-            polls.insert(0, mainPoll); // 특정 Poll을 0번 인덱스로 추가
+            polls.removeAt(pollIndex);
+            polls.shuffle(Random());
+            polls.insert(0, mainPoll);
 
-            // PollDetailCard 리스트 생성
             final cards = polls.map(PollDetailCard.new).toList();
             return SafeArea(
               child: Column(
@@ -92,9 +90,8 @@ class _ExamplePageState extends State<NewPollDetailScreen> {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         FloatingActionButton(
-                          heroTag: 'thumb_down', // 고유한 heroTag 지정
+                          heroTag: 'thumb_down',
                           onPressed: () async {
-                            // DisLikeReactionScreen으로 이동하고 결과를 기다림
                             final result = await Navigator.push(
                               context,
                               MaterialPageRoute(
@@ -104,7 +101,6 @@ class _ExamplePageState extends State<NewPollDetailScreen> {
                               ),
                             );
 
-                            // DisLikeReactionScreen에서 돌아오면 카드 스와이프
                             if (result == true) {
                               controller.swipe(CardSwiperDirection.left);
                             }
@@ -153,11 +149,23 @@ class _ExamplePageState extends State<NewPollDetailScreen> {
       'The card $previousIndex was swiped to the ${direction.index}. Now the card $currentIndex is on top',
     );
 
-    if (direction.index == 1) {
-      // dislike
-    } else if (direction.index == 1) {
-      // dislike
+    if (direction == CardSwiperDirection.left) {
+      // Dislike 처리
+      _submitReaction(false);
+    } else if (direction == CardSwiperDirection.right) {
+      // Like 처리
+      _submitReaction(true);
     }
     return true;
+  }
+
+  Future<void> _submitReaction(bool isLike) async {
+    try {
+      await likeService.submitLike(widget.pollId, isLike);
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Error: ${e.toString()}')),
+      );
+    }
   }
 }
