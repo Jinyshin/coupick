@@ -1,6 +1,4 @@
 import 'package:client/common/const/app_colors.dart';
-import 'package:client/screens/voting_detail_screen.dart';
-import 'package:client/screens/poll_detail_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'providers/wishlist_product_provider.dart';
