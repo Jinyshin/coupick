@@ -14,7 +14,8 @@ void main() {
     MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (context) => ProductProvider()),
-        ChangeNotifierProvider(create: (context) => PollsProvider()), // PollsProvider 추가
+        ChangeNotifierProvider(
+            create: (context) => PollsProvider()), // PollsProvider 추가
       ],
       child: const MyApp(),
     ),
@@ -38,7 +39,8 @@ class MyApp extends StatelessWidget {
           return MaterialApp(
             title: 'Coupick App',
             theme: ThemeData(
-              colorScheme: ColorScheme.fromSeed(seedColor: AppColors.primaryColor),
+              colorScheme:
+                  ColorScheme.fromSeed(seedColor: AppColors.primaryColor),
               useMaterial3: true,
             ),
             debugShowCheckedModeBanner: false,
@@ -46,7 +48,7 @@ class MyApp extends StatelessWidget {
                 // ? const PollDetailScreen(
                 //     pollId: 'he',
                 //   )
-                // ? const Example()
+                // ? const NewPollDetailScreen(),
                 ? const ListViewVote()
                 : const UsernameCreationScreen(),
             routes: {

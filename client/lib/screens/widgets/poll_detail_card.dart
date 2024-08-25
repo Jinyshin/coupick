@@ -1,10 +1,10 @@
 import 'package:client/common/const/app_colors.dart';
-import 'package:client/models/temp_poll_detail_model.dart';
+import 'package:client/models/polls.dart';
 import 'package:client/screens/widgets/progressbar.dart';
 import 'package:flutter/material.dart';
 
 class PollDetailCard extends StatefulWidget {
-  final PollDetailModel poll;
+  final Poll poll;
 
   const PollDetailCard(
     this.poll, {
@@ -51,12 +51,17 @@ class _PollDetailCardState extends State<PollDetailCard> {
                   Expanded(
                     child: ListView.builder(
                       controller: scrollController,
-                      itemCount: 20,
+                      itemCount: widget.poll.comments.length,
                       itemBuilder: (context, index) {
+                        final comment = widget.poll.comments[index];
                         return ListTile(
-                          leading: const Icon(Icons.thumb_down,
-                              color: AppColors.yellowLogoColor),
-                          title: Text('This is the reaction of user $index'),
+                          leading: Icon(
+                            comment.isLiked ? Icons.thumb_up : Icons.thumb_down,
+                            color: comment.isLiked
+                                ? AppColors.lightblueLogoColor
+                                : AppColors.yellowLogoColor,
+                          ),
+                          title: Text('${comment.name}: ${comment.content}'),
                         );
                       },
                     ),
@@ -95,13 +100,13 @@ class _PollDetailCardState extends State<PollDetailCard> {
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const Flexible(
+              Flexible(
                 flex: 1,
                 child: Padding(
-                  padding: EdgeInsets.only(bottom: 8.0),
+                  padding: const EdgeInsets.only(bottom: 8.0),
                   child: Text(
-                    'What do you think of this ROKA T-shirt? I want to be a cool girl',
-                    style: TextStyle(
+                    widget.poll.content,
+                    style: const TextStyle(
                       color: Colors.black,
                       fontWeight: FontWeight.bold,
                       fontSize: 20,
@@ -118,9 +123,21 @@ class _PollDetailCardState extends State<PollDetailCard> {
                         SizedBox(
                           width: screenWidth,
                           height: screenWidth,
-                          child: Image.asset(
-                            'assets/images/roka.jpg',
+                          // child: Image.asset(
+                          //   'assets/images/roka.jpg',
+                          //   fit: BoxFit.cover,
+                          // ),
+                          child: Image.network(
+                            widget.poll.thumbnail,
                             fit: BoxFit.cover,
+                            errorBuilder: (context, error, stackTrace) {
+                              return const Center(
+                                child: Icon(
+                                  Icons.error,
+                                  color: Colors.red,
+                                ),
+                              );
+                            },
                           ),
                         ),
                         Positioned(
@@ -160,9 +177,9 @@ class _PollDetailCardState extends State<PollDetailCard> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    const Text(
-                      '₩ 18,000',
-                      style: TextStyle(
+                    Text(
+                      '₩ ${widget.poll.price.toInt()}',
+                      style: const TextStyle(
                         fontSize: 18,
                         color: Colors.black,
                       ),
@@ -192,30 +209,51 @@ class _PollDetailCardState extends State<PollDetailCard> {
                   ],
                 ),
               ),
-              const ProgressBar(likes: 80, dislikes: 20),
+              ProgressBar(
+                likes: widget.poll.likes,
+                dislikes: widget.poll.dislikes,
+              ),
               const SizedBox(height: 12),
-              GestureDetector(
-                onTap: () => _showReactions(context),
-                child: const Text(
-                  'Show all reactions',
-                  style: TextStyle(color: AppColors.middleGray, fontSize: 20),
-                ),
-              ),
-              const SizedBox(height: 8),
-              const Row(
-                children: [
-                  Icon(Icons.thumb_down, color: AppColors.yellowLogoColor),
-                  SizedBox(width: 8),
-                  Expanded(
-                    child: Text(
-                      "It's ugly...",
-                      style: TextStyle(color: Colors.black, fontSize: 20),
-                      overflow: TextOverflow.ellipsis,
-                      maxLines: 1,
-                    ),
-                  ),
-                ],
-              ),
+              widget.poll.comments.isNotEmpty
+                  ? Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        GestureDetector(
+                          onTap: () => _showReactions(context),
+                          child: const Text(
+                            'Show all reactions',
+                            style: TextStyle(
+                                color: AppColors.middleGray, fontSize: 20),
+                          ),
+                        ),
+                        const SizedBox(
+                          height: 12,
+                        ),
+                        Row(
+                          children: [
+                            Icon(
+                              widget.poll.comments[0].isLiked
+                                  ? Icons.thumb_up
+                                  : Icons.thumb_down,
+                              color: widget.poll.comments[0].isLiked
+                                  ? AppColors.lightblueLogoColor
+                                  : AppColors.yellowLogoColor,
+                            ),
+                            const SizedBox(width: 8),
+                            Expanded(
+                              child: Text(
+                                widget.poll.comments[0].content,
+                                style: const TextStyle(
+                                    color: Colors.black, fontSize: 20),
+                                overflow: TextOverflow.ellipsis,
+                                maxLines: 1,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ],
+                    )
+                  : Container(), // comments가 비어있을 때 빈 Container로 대체
             ],
           ),
         ));

@@ -12,13 +12,14 @@ class LikeReactionScreen extends StatelessWidget {
     final likeService = LikeService();
 
     try {
-      final success = await likeService.submitLike(pollId, true, comment: comment);
+      final success =
+          await likeService.submitLike(pollId, true, comment: comment);
 
       if (success) {
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(content: Text('Reaction submitted successfully!')),
         );
-        Navigator.pop(context); // 성공 후 이전 화면으로 돌아가기
+        Navigator.pop(context, true); // 현재 화면을 닫고 true를 반환
       }
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
@@ -101,7 +102,6 @@ class LikeReactionScreen extends StatelessWidget {
                     backgroundColor: AppColors.faintGray,
                     onPressed: () async {
                       _submitReaction(context); // 댓글 없이 전송
-                      Navigator.pop(context, true);
                     },
                   ),
                   CustomElevatedButton(
@@ -111,7 +111,6 @@ class LikeReactionScreen extends StatelessWidget {
                     backgroundColor: AppColors.primaryColor,
                     onPressed: () async {
                       _submitReaction(context, comment: commentController.text);
-                      Navigator.pop(context, true);
                     },
                   ),
                 ],

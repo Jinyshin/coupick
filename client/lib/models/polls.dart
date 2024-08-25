@@ -72,7 +72,7 @@ class Comment {
     return Comment(
       name: json['name'] as String,
       content: json['content'] as String,
-      isLiked: json['isLiked'] as bool? ?? false, // JSON 데이터에서 필드 읽기
+      isLiked: json['isLiked'] as bool? ?? false,
     );
   }
 }
