@@ -48,16 +48,27 @@ export class PollsService {
     thumbnail: string,
     coupangUrl: string,
     likers: string[] = [],
-    dislikers: string[] = []
+    dislikers: string[] = [],
+    createdAt?: Date
   ) {
-    const poll = await this.pollModel.create({
-      price,
-      content,
-      thumbnail,
-      coupangUrl,
-      likers,
-      dislikers
-    });
+    const poll = !createdAt
+      ? await this.pollModel.create({
+        price,
+        content,
+        thumbnail,
+        coupangUrl,
+        likers,
+        dislikers
+      })
+      : await this.pollModel.create({
+        price,
+        content,
+        thumbnail,
+        coupangUrl,
+        likers,
+        dislikers,
+        createdAt
+      });
 
     return poll;
   }
