@@ -45,10 +45,10 @@ class _AddPostButtonState extends State<AddPostButton> {
       duration: const Duration(milliseconds: 200),
       curve: Curves.easeInOut,
       width: isAtTop ? 100 : 64, // Width expands to 100 when at the top, and to 64 when collapsed
-      height: isAtTop ? 56 : 64, // Height remains 56 when at the top, and increases to 64 when collapsed
+      height: isAtTop ? 48 : 64, // Height remains 56 when at the top, and increases to 64 when collapsed
       decoration: BoxDecoration(
         color: AppColors.primaryColor, // Use AppColor's primary color
-        borderRadius: BorderRadius.circular(isAtTop ? 24 : 32), // More rounded when collapsed
+        borderRadius: BorderRadius.circular(isAtTop ? 32 : 32), // More rounded when collapsed
         boxShadow: [
           BoxShadow(
             color: Colors.black.withOpacity(0.3), // Slightly darker shadow

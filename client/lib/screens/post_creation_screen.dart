@@ -73,7 +73,7 @@ class _PostCreationScreenState extends State<PostCreationScreen> {
                       ),
                       const SizedBox(height: 5),
                       Text(
-                        selectedProduct.price.toString() + '원',
+                        '${selectedProduct.price}원',
                         style: const TextStyle(
                           color: Colors.red,
                           fontSize: 22,
@@ -108,14 +108,31 @@ class _PostCreationScreenState extends State<PostCreationScreen> {
             ),
             const SizedBox(height: 20),
             ElevatedButton(
-              onPressed: () => _postPollService.postPoll(
-                name: selectedProduct.name,
-                price: selectedProduct.price,
-                thumbnail: selectedProduct.imageUrl,
-                content: _contentController.text,
-                coupangUrl: selectedProduct.coupangUrl,
-                context: context,
-              ),
+              onPressed: () async {
+                // Execute the post operation and handle the result
+                bool success = await _postPollService.postPoll(
+                  name: selectedProduct.name,
+                  price: selectedProduct.price,
+                  thumbnail: selectedProduct.imageUrl,
+                  content: _contentController.text,
+                  coupangUrl: selectedProduct.coupangUrl,
+                  context: context,
+                );
+
+                if (success) {
+                  // Show a success message
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                      content: Text('Post created successfully!'),
+                      backgroundColor: Colors.green,
+                    ),
+                  );
+
+                  // Navigate back to the main page if the post is successful
+                  Navigator.pop(context);
+                  Navigator.pop(context);
+                }
+              },
               child: const Text('Confirm'),
             ),
           ],
