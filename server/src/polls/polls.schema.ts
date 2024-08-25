@@ -1,7 +1,7 @@
 import { Prop, Schema, SchemaFactory } from "@nestjs/mongoose";
 import { Document } from "mongoose";
 
-@Schema({ timestamps: true })
+@Schema({})
 export class Poll extends Document {
   @Prop({ required: true })
   price: number;
