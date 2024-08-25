@@ -98,6 +98,7 @@ export class PollsController {
       const { _id } = this.pollsService.auth(`Bearer ${token}`);
       return _id as string;
     });
+    let acc = new Date('2024-08-24T05:00:00.000Z');
     const itemIndices = [...thumbnails.keys()];
     const item = Promise.all(
       itemIndices.map((i) => {
@@ -107,13 +108,16 @@ export class PollsController {
         shuffledUserIds.sort((a, b) => Math.random() - 0.5);
         const likers = shuffledUserIds.slice(0, likes);
         const dislikers = shuffledUserIds.slice(likes, likes + dislikes);
+        const createdAt = new Date(acc.getTime() + [2, 5, 11, 17][Math.floor(Math.random() * 4)] * 60000);
+        acc = createdAt;
         return this.pollsService.createPoll(
           (Math.floor(Math.random() * 27) + 3) * 1000,
           contents[i % contents.length],
           thumbnails[i % thumbnails.length],
           'https://www.' + coupangs[i % coupangs.length],
           likers,
-          dislikers
+          dislikers,
+          createdAt
         );
       })
     );
