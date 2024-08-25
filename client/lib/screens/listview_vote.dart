@@ -1,10 +1,13 @@
 import 'package:client/common/const/app_colors.dart';
+import 'package:client/screens/new_poll_detail_screen.dart';
 import 'package:client/screens/poll_detail_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import './widgets/pink_container.dart';
 import '../models/polls.dart';
-import 'package:client/services/getpolls_service.dart'; // Import the GetPollsService
 import 'package:client/utilities/logout.dart';
+import './wishlist_screen.dart';
+import '../providers/pollsprovider.dart';
 import './widgets/add_post.dart';
 
 class ListViewVote extends StatefulWidget {
@@ -15,14 +18,18 @@ class ListViewVote extends StatefulWidget {
 }
 
 class _ListViewVoteState extends State<ListViewVote> {
-  late Future<List<Poll>> futurePolls;
   late ScrollController _scrollController;
 
   @override
   void initState() {
     super.initState();
-    futurePolls = GetPollsService().getPolls(); // Fetch polls from the API
     _scrollController = ScrollController();
+
+    // Fetch polls after the first frame is built
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      final pollsProvider = Provider.of<PollsProvider>(context, listen: false);
+      pollsProvider.fetchPolls(); // Fetch polls using the provider
+    });
   }
 
   @override
@@ -32,9 +39,8 @@ class _ListViewVoteState extends State<ListViewVote> {
   }
 
   Future<void> _reloadPolls() async {
-    setState(() {
-      futurePolls = GetPollsService().getPolls(); // Reload polls from the API
-    });
+    final pollsProvider = Provider.of<PollsProvider>(context, listen: false);
+    await pollsProvider.fetchPolls(); // Reload polls using the provider
   }
 
   @override
@@ -62,44 +68,44 @@ class _ListViewVoteState extends State<ListViewVote> {
       ),
       body: RefreshIndicator(
         onRefresh: _reloadPolls, // Define the function to reload the list
-        child: FutureBuilder<List<Poll>>(
-          future: futurePolls,
-          builder: (context, snapshot) {
-            if (snapshot.connectionState == ConnectionState.waiting) {
+        child: Consumer<PollsProvider>(
+          builder: (context, pollsProvider, child) {
+            if (pollsProvider.isLoading) {
               return const Center(child: CircularProgressIndicator());
-            } else if (snapshot.hasError) {
-              return Center(child: Text('Error: ${snapshot.error}'));
-            } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
+            } else if (pollsProvider.hasError) {
+              return Center(
+                  child: Text('Error: ${pollsProvider.errorMessage}'));
+            } else if (pollsProvider.polls.isEmpty) {
               return const Center(child: Text('No polls available'));
             } else {
-              final products = snapshot.data!;
+              final products = pollsProvider.polls;
               return ListView.builder(
-                controller: _scrollController, // Attach ScrollController to the ListView
+                controller: _scrollController,
                 itemCount: products.length,
                 itemBuilder: (context, index) {
                   final poll = products[index];
                   return Column(
                     children: [
                       GestureDetector(
-                      onTap: () {
-                        // PollDetailScreen으로 네비게이트, pollId 전달
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) =>
-                                PollDetailScreen(pollId: poll.id),
-                          ),
-                        );
-                      },
-                      child: PinkContainer(poll: poll),
-                    ),
-                    const Padding(
-                      padding: EdgeInsets.symmetric(
-                          horizontal: 16.0), // 왼쪽, 오른쪽에 16의 패딩 추가
-                      child: Divider(
-                        thickness: 1, // 두께를 1로 설정
+                        onTap: () {
+                          // PollDetailScreen으로 네비게이트, pollId 전달
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) =>
+                                  NewPollDetailScreen(pollId: poll.id),
+                            ),
+                          );
+                        },
+                        child: PinkContainer(poll: poll),
                       ),
-                    ), // Divider 추가
+                      const Padding(
+                        padding: EdgeInsets.symmetric(
+                            horizontal: 16.0), // 왼쪽, 오른쪽에 16의 패딩 추가
+                        child: Divider(
+                          thickness: 1, // 두께를 1로 설정
+                        ),
+                      ), // Divider 추가
                     ],
                   );
                 },
@@ -108,7 +114,9 @@ class _ListViewVoteState extends State<ListViewVote> {
           },
         ),
       ),
-      floatingActionButton: AddPostButton(scrollController: _scrollController), // Pass ScrollController to the button
+      floatingActionButton: AddPostButton(
+          scrollController:
+              _scrollController), // Pass ScrollController to the button
     );
   }
 }

@@ -1,16 +1,14 @@
-import 'package:client/utilities/time.dart';
-
 class Poll {
   final String id;
-  final double price;  // 수정: double로 변경
+  final int price;
   final String content;
   final String thumbnail;
   final String coupangUrl;
-  final int likes;
-  final int dislikes;
-  final bool isVoted;
-  final bool isLiked;
-  final bool isDisliked;
+  int likes;
+  int dislikes;
+  bool isVoted;
+  bool isLiked;
+  bool isDisliked;
   final List<Comment> comments;
   final DateTime createdAt;
   final DateTime updatedAt;
@@ -31,40 +29,50 @@ class Poll {
     required this.updatedAt,
   });
 
-  String get timeLeft => calculateTimeLeft(createdAt);
-
   factory Poll.fromJson(Map<String, dynamic> json) {
-    return Poll(
-      id: json['_id'],
-      price: json['price'].toDouble(),  // 수정: double로 변환하여 저장
-      content: json['content'],
-      thumbnail: json['thumbnail'],
-      coupangUrl: json['coupangUrl'],
-      likes: json['likes'],
-      dislikes: json['dislikes'],
-      isVoted: json['isVoted'],
-      isLiked: json['isLiked'],
-      isDisliked: json['isDisliked'],
-      comments: (json['comments'] as List).map((comment) => Comment.fromJson(comment)).toList(),
-      createdAt: DateTime.parse(json['createdAt']),
-      updatedAt: DateTime.parse(json['updatedAt']),
-    );
+    try {
+      return Poll(
+        id: json['_id'] as String,
+        price: json['price'] as int,
+        content: json['content'] as String,
+        thumbnail: json['thumbnail'] as String,
+        coupangUrl: json['coupangUrl'] as String,
+        likes: json['likes'] as int? ?? 0,
+        dislikes: json['dislikes'] as int? ?? 0,
+        isVoted: json['isVoted'] as bool? ?? false,
+        isLiked: json['isLiked'] as bool? ?? false,
+        isDisliked: json['isDisliked'] as bool? ?? false,
+        comments: (json['comments'] as List<dynamic>)
+            .map((item) => Comment.fromJson(item as Map<String, dynamic>))
+            .toList(),
+        createdAt: DateTime.parse(json['createdAt'] as String),
+        updatedAt: DateTime.parse(json['updatedAt'] as String),
+      );
+    } catch (e, stackTrace) {
+      print('Failed to parse poll data: $e');
+      print('JSON data: $json');
+      print('Stack trace: $stackTrace');
+      throw Exception('Failed to parse poll data: $e');
+    }
   }
 }
 
 class Comment {
   final String name;
   final String content;
+  final bool isLiked; // 추가된 필드
 
   Comment({
     required this.name,
     required this.content,
+    required this.isLiked, // 필수 필드로 추가
   });
 
   factory Comment.fromJson(Map<String, dynamic> json) {
     return Comment(
       name: json['name'] as String,
       content: json['content'] as String,
+      isLiked: json['isLiked'] as bool? ?? false,
     );
   }
 }

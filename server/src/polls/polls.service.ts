@@ -24,16 +24,20 @@ export class PollsService {
     }
   }
 
+  async getPoll(pollId: string) {
+    return await this.pollModel.findById(pollId).lean();
+  }
+
   async listPolls(userId: string) {
     return await this.pollModel.aggregate([
       {
         $match: {
-          likers: { $nin: [ userId ] },
-          dislikers: { $nin: [ userId ] }
+          // likers: { $nin: [ userId ] },
+          // dislikers: { $nin: [ userId ] }
         }
       },
       {
-        $sample: { size: 20 }
+        $sample: { size: 60 }
       }
     ]) as Poll[];
   }
@@ -75,7 +79,8 @@ export class PollsService {
       updateQuery['$push']['comments'] = {
         userId,
         name,
-        content: comment
+        content: comment,
+        isLiked: like
       };
     }
 

@@ -156,8 +156,9 @@ List<Poll> getProducts() {
   for (int i = 0; i < thumbnailUrls.length; i++) {
     final poll = Poll(
       id: (i + 1).toString(),
-      price: getRandomInt(1000, 100000).toDouble(),
-      content: pollContents[getRandomInt(0, pollContents.length)], // Random content from the list
+      price: getRandomInt(1000, 100000),
+      content: pollContents[
+          getRandomInt(0, pollContents.length)], // Random content from the list
       thumbnail: thumbnailUrls[i],
       coupangUrl: coupangUrls[i],
       likes: getRandomInt(10, 100), // Random likes between 50 and 500
@@ -166,7 +167,9 @@ List<Poll> getProducts() {
       isLiked: false,
       isDisliked: false,
       comments: [],
-      createdAt: DateTime.now().subtract(Duration(hours: getRandomInt(1, 24))), // Random creation time within the last 48 hours
+      createdAt: DateTime.now().subtract(Duration(
+          hours: getRandomInt(
+              1, 24))), // Random creation time within the last 48 hours
       updatedAt: DateTime.now(),
     );
     products.add(poll);

@@ -21,8 +21,13 @@ class ProductProvider with ChangeNotifier {
 
   Product? get selectedProduct => _selectedProduct;
 
-  void selectProduct(Product product) {
+    void selectProduct(Product product) {
     _selectedProduct = product;
+    notifyListeners();
+  }
+
+  void addProduct(Product product) {
+    _wishlist.add(product);
     notifyListeners();
   }
 }
