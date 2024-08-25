@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../providers/wishlist_product_provider.dart';
 import 'post_creation_screen.dart';
+import 'package:intl/intl.dart';
 
 class WishlistScreen extends StatelessWidget {
   const WishlistScreen({super.key});
@@ -13,7 +14,7 @@ class WishlistScreen extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Select your coupick item:'),
+        
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0), // Added padding around the entire GridView
@@ -81,7 +82,7 @@ class WishlistScreen extends StatelessWidget {
                                 child: Container(
                                   padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 3),
                                   decoration: BoxDecoration(
-                                    color: Colors.blue.withOpacity(0.7),
+                                    color: Colors.blue.withOpacity(0.3),
                                     borderRadius: BorderRadius.circular(8),
                                   ),
                                   child: const Row(
@@ -133,7 +134,7 @@ class WishlistScreen extends StatelessWidget {
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 8.0),
                       child: Text(
-                        product.price.toString() + '원',
+                        '￦ ${NumberFormat('#,###').format(product.price.toInt())}',
                         style: const TextStyle(
                           color: Colors.red,
                           fontSize: 20, // Increased font size for price

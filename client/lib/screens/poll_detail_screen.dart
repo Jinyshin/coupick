@@ -116,7 +116,7 @@ class _ProductInfoSectionState extends State<_ProductInfoSection> {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               const Text(
-                '₩ 18,000',
+                '￦ 18,000',
                 style: TextStyle(
                   fontSize: 18,
                   color: Colors.black,

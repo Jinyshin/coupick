@@ -41,7 +41,10 @@ class _ListViewVoteState extends State<ListViewVote> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('coupicks'),
+        title: Image.asset(
+          'assets/images/logo.png',
+          height: 40,
+        ),
         actions: [
           IconButton(
             icon: const Icon(Icons.notifications),

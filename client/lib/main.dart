@@ -1,6 +1,4 @@
 import 'package:client/common/const/app_colors.dart';
-import 'package:client/screens/voting_detail_screen.dart';
-import 'package:client/screens/poll_detail_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'providers/wishlist_product_provider.dart';
@@ -32,7 +30,7 @@ class MyApp extends StatelessWidget {
         } else {
           bool hasToken = snapshot.data ?? false; // 토큰 존재 여부
           return MaterialApp(
-            title: 'Coupick App',
+            title: 'Coupick',
             theme: ThemeData(
               colorScheme: ColorScheme.fromSeed(seedColor: AppColors.primaryColor),
               useMaterial3: true,
