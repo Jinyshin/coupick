@@ -1,11 +1,6 @@
-import 'package:client/common/const/app_colors.dart';
-import 'package:client/screens/dislike_reaction_screen.dart';
-import 'package:client/screens/like_reaction_screen.dart';
-import 'package:client/screens/widgets/progressbar.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:client/providers/pollsprovider.dart';
-import 'package:url_launcher/url_launcher.dart';
 import 'package:client/screens/widgets/product_info_section.dart';
 import 'package:client/screens/widgets/reaction_section.dart';
 

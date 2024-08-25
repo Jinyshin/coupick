@@ -57,7 +57,7 @@ class PollsProvider with ChangeNotifier {
     }
 
     if (comment != null && comment.isNotEmpty) {
-      poll.comments.add(Comment(name: 'You', content: comment));
+      poll.comments.add(Comment(name: 'You', content: comment, isLiked: like));
     }
 
     notifyListeners();

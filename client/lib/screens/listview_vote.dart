@@ -1,4 +1,5 @@
 import 'package:client/common/const/app_colors.dart';
+import 'package:client/screens/new_poll_detail_screen.dart';
 import 'package:client/screens/poll_detail_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -69,7 +70,8 @@ class _ListViewVoteState extends State<ListViewVote> {
             if (pollsProvider.isLoading) {
               return const Center(child: CircularProgressIndicator());
             } else if (pollsProvider.hasError) {
-              return Center(child: Text('Error: ${pollsProvider.errorMessage}'));
+              return Center(
+                  child: Text('Error: ${pollsProvider.errorMessage}'));
             } else if (pollsProvider.polls.isEmpty) {
               return const Center(child: Text('No polls available'));
             } else {
@@ -88,14 +90,15 @@ class _ListViewVoteState extends State<ListViewVote> {
                             context,
                             MaterialPageRoute(
                               builder: (context) =>
-                                  PollDetailScreen(pollId: poll.id),
+                                  NewPollDetailScreen(pollId: poll.id),
                             ),
                           );
                         },
                         child: PinkContainer(poll: poll),
                       ),
                       const Padding(
-                        padding: EdgeInsets.symmetric(horizontal: 16.0), // 왼쪽, 오른쪽에 16의 패딩 추가
+                        padding: EdgeInsets.symmetric(
+                            horizontal: 16.0), // 왼쪽, 오른쪽에 16의 패딩 추가
                         child: Divider(
                           thickness: 1, // 두께를 1로 설정
                         ),
@@ -108,7 +111,9 @@ class _ListViewVoteState extends State<ListViewVote> {
           },
         ),
       ),
-      floatingActionButton: AddPostButton(scrollController: _scrollController), // Pass ScrollController to the button
+      floatingActionButton: AddPostButton(
+          scrollController:
+              _scrollController), // Pass ScrollController to the button
     );
   }
 }

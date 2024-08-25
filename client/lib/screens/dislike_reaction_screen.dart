@@ -15,7 +15,8 @@ class DisLikeReactionScreen extends StatelessWidget {
     final pollsProvider = Provider.of<PollsProvider>(context, listen: false);
 
     try {
-      final success = await likeService.submitLike(pollId, false, comment: comment);
+      final success =
+          await likeService.submitLike(pollId, false, comment: comment);
 
       if (success) {
         // API에 데이터를 성공적으로 전송한 후, provider를 통해 상태를 업데이트
@@ -24,7 +25,7 @@ class DisLikeReactionScreen extends StatelessWidget {
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(content: Text('Reaction submitted successfully!')),
         );
-        Navigator.pop(context); // 성공 후 이전 화면으로 돌아가기
+        Navigator.pop(context, true); // 현재 화면을 닫고 true를 반환
       }
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
@@ -107,7 +108,6 @@ class DisLikeReactionScreen extends StatelessWidget {
                     backgroundColor: AppColors.faintGray,
                     onPressed: () async {
                       _submitReaction(context); // 댓글 없이 전송
-                      Navigator.pop(context, true);
                     },
                   ),
                   CustomElevatedButton(
@@ -117,7 +117,6 @@ class DisLikeReactionScreen extends StatelessWidget {
                     backgroundColor: AppColors.primaryColor,
                     onPressed: () async {
                       _submitReaction(context, comment: commentController.text);
-                      Navigator.pop(context, true); // 현재 화면을 닫고 true를 반환
                     },
                   ),
                 ],

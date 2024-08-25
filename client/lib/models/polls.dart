@@ -2,7 +2,7 @@ import 'package:client/utilities/time.dart';
 
 class Poll {
   final String id;
-  final double price;  // 수정: double로 변경
+  final double price; // 수정: double로 변경
   final String content;
   final String thumbnail;
   final String coupangUrl;
@@ -36,7 +36,7 @@ class Poll {
   factory Poll.fromJson(Map<String, dynamic> json) {
     return Poll(
       id: json['_id'],
-      price: json['price'].toDouble(),  // 수정: double로 변환하여 저장
+      price: json['price'].toDouble(), // 수정: double로 변환하여 저장
       content: json['content'],
       thumbnail: json['thumbnail'],
       coupangUrl: json['coupangUrl'],
@@ -45,7 +45,9 @@ class Poll {
       isVoted: json['isVoted'],
       isLiked: json['isLiked'],
       isDisliked: json['isDisliked'],
-      comments: (json['comments'] as List).map((comment) => Comment.fromJson(comment)).toList(),
+      comments: (json['comments'] as List)
+          .map((comment) => Comment.fromJson(comment))
+          .toList(),
       createdAt: DateTime.parse(json['createdAt']),
       updatedAt: DateTime.parse(json['updatedAt']),
     );
@@ -55,16 +57,19 @@ class Poll {
 class Comment {
   final String name;
   final String content;
+  final bool isLiked; // 추가된 필드
 
   Comment({
     required this.name,
     required this.content,
+    required this.isLiked, // 필수 필드로 추가
   });
 
   factory Comment.fromJson(Map<String, dynamic> json) {
     return Comment(
       name: json['name'] as String,
       content: json['content'] as String,
+      isLiked: json['isLiked'] as bool? ?? false,
     );
   }
 }
