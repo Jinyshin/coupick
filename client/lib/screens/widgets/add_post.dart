@@ -93,7 +93,7 @@ class _AddPostButtonState extends State<AddPostButton> {
                         child: Align( // Ensures the text is centered vertically
                           alignment: Alignment.center,
                           child: Text(
-                            '글쓰기',
+                            'Post',
                             style: TextStyle(
                               fontWeight: FontWeight.bold,
                               fontSize: 16,
@@ -101,7 +101,7 @@ class _AddPostButtonState extends State<AddPostButton> {
                             ),
                           ),
                         ),
-                        key: ValueKey('글쓰기'), // Unique key for AnimatedSwitcher
+                        key: ValueKey('Post'), // Unique key for AnimatedSwitcher
                       )
                     : const SizedBox.shrink(), // Empty widget when not at the top
               ),

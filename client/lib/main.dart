@@ -35,7 +35,7 @@ class MyApp extends StatelessWidget {
         } else {
           bool hasToken = snapshot.data ?? false; // 토큰 존재 여부
           return MaterialApp(
-            title: 'Coupick App',
+            title: 'Coupick',
             theme: ThemeData(
               colorScheme:
                   ColorScheme.fromSeed(seedColor: AppColors.primaryColor),

@@ -86,15 +86,15 @@ class PinkContainer extends StatelessWidget {
                     children: [
                       Row(
                         children: [
+                          CountdownTimer(endTime: poll.createdAt.add(Duration(hours: 24))),
+                          const SizedBox(width: 5),
                           const Text(
-                            '투표 마감까지',
+                            'Remaining',
                             style: TextStyle(
                               fontSize: 14,
                               color: Colors.black54,
                             ),
                           ),
-                          const SizedBox(width: 5),
-                          CountdownTimer(endTime: poll.createdAt.add(Duration(hours: 24))),
                         ],
                       ),
                       const SizedBox(height: 10),

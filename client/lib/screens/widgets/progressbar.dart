@@ -93,7 +93,7 @@ class ProgressBar extends StatelessWidget {
         ),
         const SizedBox(height: 8),
         Text(
-          '$totalVotes명의 사람들이 투표 참여중!',
+          '$totalVotes people have joined!',
           style: const TextStyle(fontSize: 14, color: AppColors.middleGray),
         ),
       ],

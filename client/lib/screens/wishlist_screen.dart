@@ -4,6 +4,7 @@ import 'dart:async';
 import 'package:provider/provider.dart';
 import '../providers/wishlist_product_provider.dart';
 import 'post_creation_screen.dart';
+import 'package:intl/intl.dart';
 import '../models/wishlist_product.dart';
 
 class WishlistScreen extends StatefulWidget {
@@ -25,7 +26,6 @@ class _WishlistScreenState extends State<WishlistScreen> {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Select your coupick item:'),
         actions: [
           IconButton(
             icon: const Icon(Icons.add),
@@ -101,7 +101,7 @@ class _WishlistScreenState extends State<WishlistScreen> {
                                 child: Container(
                                   padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 3),
                                   decoration: BoxDecoration(
-                                    color: Colors.blue.withOpacity(0.7),
+                                    color: Colors.blue.withOpacity(0.3),
                                     borderRadius: BorderRadius.circular(8),
                                   ),
                                   child: const Row(
@@ -153,7 +153,7 @@ class _WishlistScreenState extends State<WishlistScreen> {
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 8.0),
                       child: Text(
-                        product.price.toInt().toString() + '원',
+                        '￦ ${NumberFormat('#,###').format(product.price.toInt())}',
                         style: const TextStyle(
                           color: Colors.red,
                           fontSize: 20,

@@ -1,8 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import '../providers/wishlist_product_provider.dart';
-import '../services/postpoll_service.dart';
-import './widgets/custom_text_input_field.dart';
+import 'package:client/providers/wishlist_product_provider.dart';
+import 'package:client/services/postpoll_service.dart';
+import 'package:client/screens/widgets/custom_text_input_field.dart';
+import 'package:client/screens/widgets/custom_elevated_button.dart';
+import 'package:client/common/const/app_colors.dart';
+import 'package:intl/intl.dart';
+
 
 class PostCreationScreen extends StatefulWidget {
   const PostCreationScreen({super.key});
@@ -18,11 +22,14 @@ class _PostCreationScreenState extends State<PostCreationScreen> {
   @override
   Widget build(BuildContext context) {
     final selectedProduct = Provider.of<ProductProvider>(context).selectedProduct;
-
+    
+    final screenWidth = MediaQuery.of(context).size.width;
+    final paddedWidth = screenWidth - 32.0;
+    
     if (selectedProduct == null) {
       return Scaffold(
         appBar: AppBar(
-          title: const Text('Write your coupick post:'),
+          
         ),
         body: const Center(
           child: Text('No product selected!'),
@@ -32,7 +39,7 @@ class _PostCreationScreenState extends State<PostCreationScreen> {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Write your coupick post:'),
+        
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -73,7 +80,7 @@ class _PostCreationScreenState extends State<PostCreationScreen> {
                       ),
                       const SizedBox(height: 5),
                       Text(
-                        '${selectedProduct.price}원',
+                        '￦ ${NumberFormat('#,###').format(selectedProduct.price.toInt())}',
                         style: const TextStyle(
                           color: Colors.red,
                           fontSize: 22,
@@ -107,33 +114,36 @@ class _PostCreationScreenState extends State<PostCreationScreen> {
               controller: _contentController, // Added controller
             ),
             const SizedBox(height: 20),
-            ElevatedButton(
-              onPressed: () async {
-                // Execute the post operation and handle the result
-                bool success = await _postPollService.postPoll(
-                  name: selectedProduct.name,
-                  price: selectedProduct.price,
-                  thumbnail: selectedProduct.imageUrl,
-                  content: _contentController.text,
-                  coupangUrl: selectedProduct.coupangUrl,
-                  context: context,
-                );
-
-                if (success) {
-                  // Show a success message
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(
-                      content: Text('Post created successfully!'),
-                      backgroundColor: Colors.green,
+            Padding(
+              padding: const EdgeInsets.only(bottom: 24.0),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: [
+                  CustomElevatedButton(
+                    width: paddedWidth * 0.47,
+                    text: 'Cancel',
+                    textColor: AppColors.darkGray,
+                    backgroundColor: AppColors.faintGray,
+                    onPressed: () {
+                      Navigator.pop(context);
+                    },
+                  ),
+                  CustomElevatedButton(
+                    width: paddedWidth * 0.47,
+                    text: 'Confirm',
+                    textColor: Colors.white,
+                    backgroundColor: AppColors.primaryColor,
+                    onPressed: () => _postPollService.postPoll(
+                      name: selectedProduct.name,
+                      price: selectedProduct.price,
+                      thumbnail: selectedProduct.imageUrl,
+                      content: _contentController.text,
+                      coupangUrl: selectedProduct.coupangUrl,
+                      context: context,
                     ),
-                  );
-
-                  // Navigate back to the main page if the post is successful
-                  Navigator.pop(context);
-                  Navigator.pop(context);
-                }
-              },
-              child: const Text('Confirm'),
+                  ),
+                ],
+              ),
             ),
           ],
         ),
