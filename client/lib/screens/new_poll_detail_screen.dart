@@ -150,8 +150,14 @@ class _ExamplePageState extends State<NewPollDetailScreen> {
     CardSwiperDirection direction,
   ) {
     debugPrint(
-      'The card $previousIndex was swiped to the ${direction.name}. Now the card $currentIndex is on top',
+      'The card $previousIndex was swiped to the ${direction.index}. Now the card $currentIndex is on top',
     );
+
+    if (direction.index == 1) {
+      // dislike
+    } else if (direction.index == 1) {
+      // dislike
+    }
     return true;
   }
 }

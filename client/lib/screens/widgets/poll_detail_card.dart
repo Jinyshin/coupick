@@ -2,6 +2,7 @@ import 'package:client/common/const/app_colors.dart';
 import 'package:client/models/polls.dart';
 import 'package:client/screens/widgets/progressbar.dart';
 import 'package:flutter/material.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class PollDetailCard extends StatefulWidget {
   final Poll poll;
@@ -185,7 +186,18 @@ class _PollDetailCardState extends State<PollDetailCard> {
                       ),
                     ),
                     TextButton(
-                      onPressed: () {},
+                      onPressed: () async {
+                        final url = Uri.parse(widget.poll.coupangUrl);
+                        print('Attempting to launch $url');
+                        if (await canLaunchUrl(url)) {
+                          await launchUrl(url,
+                              mode: LaunchMode.externalApplication);
+                          print('Launch successful');
+                        } else {
+                          print('Could not launch $url');
+                          throw 'Could not launch $url';
+                        }
+                      },
                       style: TextButton.styleFrom(
                         foregroundColor: Colors.black,
                         shape: RoundedRectangleBorder(
