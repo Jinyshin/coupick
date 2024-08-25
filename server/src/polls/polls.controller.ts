@@ -24,7 +24,7 @@ export class PollsController {
       isVoted: [...likers, ...dislikers].includes(_id as string),
       isLiked: likers.includes(_id as string),
       isDisliked: dislikers.includes(_id as string),
-      comments: comments.map(({ name, content }) => ({ name, content }))
+      comments: comments.map(({ name, content, isLiked }) => ({ name, content, isLiked }))
     }))
   }
 
@@ -43,6 +43,30 @@ export class PollsController {
     }
 
     return await this.pollsService.createPoll(price, content, thumbnail, coupangUrl);
+  }
+
+  @Get(':pollId')
+  async getPoll(
+    @Param('pollId') pollId: string,
+    @Headers('Authorization') token?: string,
+  ) {
+    const { _id } = this.pollsService.auth(token);
+    const {
+      likers,
+      dislikers,
+      comments,
+      ...others
+    } = await this.pollsService.getPoll(pollId);
+
+    return {
+      ...others,
+      likes: likers.length,
+      dislikes: dislikers.length,
+      isVoted: [...likers, ...dislikers].includes(_id as string),
+      isLiked: likers.includes(_id as string),
+      isDisliked: dislikers.includes(_id as string),
+      comments: comments.map(({ name, content, isLiked }) => ({ name, content, isLiked }))
+    }
   }
 
   @Post(':pollId/likes')
@@ -86,8 +110,8 @@ export class PollsController {
         return this.pollsService.createPoll(
           (Math.floor(Math.random() * 27) + 3) * 1000,
           contents[i % contents.length],
-          thumbnails[i & thumbnails.length],
-          coupangs[i % coupangs.length],
+          thumbnails[i % thumbnails.length],
+          'https://www.' + coupangs[i % coupangs.length],
           likers,
           dislikers
         );
